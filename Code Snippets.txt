@@ -1,0 +1,159 @@
+Concepts in (loose) order of difficulty:
+	⁃	Parameters
+	⁃	Return values
+	⁃	String manipulation
+	⁃	Sequential flow
+	⁃	Conditional
+	⁃	Looping/iteration
+	⁃	Nested branches
+	⁃	Nested loops
+
+
+ ###### EASY ######
+Snippet 1 (Add two parameters):
+JavaScript
+```
+function foo(a, b) {
+    return a + b;
+}
+```
+Python
+```
+def foo(a, b):
+	return a + b
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+
+Snippet 2 (Return larger of two parameters):
+JavaScript
+```
+function foo(a, b) {
+    if (a > b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+```
+Python
+```
+def foo(a, b):
+	if (a > b):
+		return a
+	else:
+		return b
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+	⁃	Conditional
+
+Snippet 3 (Add x periods to end of y)
+JavaScript
+```
+function foo1(x, y) {
+    for (i = 0; i < x; i++) {
+        y = y + ".";
+        
+    }
+    return y;
+}
+```
+Python
+```
+def foo(x, y):
+	for i in range(x):
+		y += “.”
+	return y
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	String manipulation
+	⁃	Sequential flow
+	⁃	Looping/iteration
+
+
+ ###### MEDIUM ######
+Snippet 4 (Return true if and only if both parameters are even)
+JavaScript
+```
+function foo(a, b) {
+    if (b % 2 == 0 && a % 2 == 0) {
+        return True;
+    } else {
+        return False;
+    }
+}
+```
+Python
+```
+def foo(a, b):
+	return (a %2 == 0 and b % 2 == 0)
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+	⁃	Conditional
+
+Snippet 5 (return sum of first a integers)
+JavaScript
+```
+function foo(a) {
+    x = 0;
+    for (i = 1; i <= a; i++) {
+        x += i;
+    }
+    return x;
+}
+```
+Python
+```
+def foo(a):
+	x = 0
+	for i in range(1, a+1):
+		x += i
+	return x
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+	⁃	Looping/iteration
+
+
+Snippet 6 (return the factorial of the smaller parameter)
+JavaScript
+```
+function foo(a, b) {
+    bar = 1;
+    if (a < b) {
+        for (x = 1; x <= a; x++) {
+            bar *= x;
+        }
+    } else {
+        for (x = 1; x <= b; x++) {
+            bar *= x;
+        }
+    }
+    return bar;
+}
+```
+Note: fixed the operator, a < b
+Python
+```
+def foo(a, b):
+	bar = 1
+	if (a < b):
+		for x in range(1, a+1):
+			bar *= x
+	else:
+		for x in range(1, b+1):
+			bar *= x
+	return x
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+	⁃	Looping/iteration
+	⁃	Nested branches
