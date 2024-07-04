@@ -178,7 +178,7 @@ def foo(a, b):
 	⁃	Looping/iteration
 	⁃	Nested branches
 	
-Snippet 8 (return the first b prime numbers)
+Snippet 8 (return the prime numbers less than b)
 JavaScript
 ```
 function foo(b) {
