@@ -183,7 +183,7 @@ JavaScript
 ```
 function foo(b) {
     bar = [];
-    for (i = 2; i <= b; i++) {
+    for (i = 2; i < b; i++) {
             bar.push(i);
             if (i != 1) {
                 for (j = 1; j < i; j++) {
