@@ -3,7 +3,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../FirebaseConfig';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
-export const Login = () => {
+
+const Login = () => {
 
     const [user] = useAuthState(auth);
 
@@ -23,94 +24,94 @@ export const Login = () => {
 
     useEffect(() => {
         if (user) {
-            // user is already signed in 
-            console.log('User is logged in');
+            // user is already signed in
             navigate('/');
-        } else {
-            // user is not signed in
-
+        }
+        else {
+            // user is not signed in but the link is valid
             if (isSignInWithEmailLink(auth, window.location.href)) {
-                let email = window.localStorage.getItem('email');
+                // now in case user clicks the email link on a different device, we will ask for email confirmation
+                let email = localStorage.getItem('email');
                 if (!email) {
-                    email = window.prompt('Please provide your email for confirmation');
+                    email = window.prompt('Please provide your email');
                 }
-
+                // after that we will complete the login process
                 setInitialLoading(true);
-                signInWithEmailLink(auth, email, window.location.href)
+                signInWithEmailLink(auth, localStorage.getItem('email'), window.location.href)
                     .then((result) => {
-                        window.localStorage.removeItem('email');
+                        // we can get the user from result.user but no need in this case
+                        console.log(result.user);
+                        localStorage.removeItem('email');
                         setInitialLoading(false);
                         setInitialError('');
                         navigate('/');
-                    })
-                    .catch((error) => {
+                    }).catch((err) => {
                         setInitialLoading(false);
-                        setInitialError(error.message);
+                        setInitialError(err.message);
                         navigate('/login');
-                    });
+                    })
+            }
+            else {
+                console.log('enter email and sign in');
             }
         }
-    }, [user, search, navigate])
+    }, [user, search, navigate]);
 
-    const handleLogin = async (e) => {
+    const handleLogin = (e) => {
         e.preventDefault();
         setLoginLoading(true);
-        try {
-            await sendSignInLinkToEmail(auth, email, {
-                url: 'http://localhost:3000',  // Ensure this URL is authorized in your Firebase Console
-                handleCodeInApp: true,
-            });
-            window.localStorage.setItem('email', email);
+        sendSignInLinkToEmail(auth, email, {
+            // this is the URL that we will redirect back to after clicking on the link in mailbox
+            url: 'http://localhost:3000/login',
+            handleCodeInApp: true,
+        }).then(() => {
+            localStorage.setItem('email', email);
             setLoginLoading(false);
             setLoginError('');
-            setInfoMsg('Email sent. Please check your email.');
-            console.log('Email sent successfully');
-        } catch (error) {
+            setInfoMsg('We have sent you an email with a link to sign in');
+        }).catch(err => {
             setLoginLoading(false);
-            setLoginError(error.message);
-            console.error('Error sending email link:', error);
+            setLoginError(err.message);
+        })
+    }
+
+    const renderContent = () => {
+        // loading
+        if (initialLoading) {
+          return <div>Loading...</div>;
         }
-    };
+        // error
+        if (initialError !== '') {
+          return <div className='error-msg'>{initialError}</div>;
+        }
+        // logged in but redirecting to home
+        if (user) {
+          return <div>Please wait...</div>;
+        }
+        // first time users
+        return (
+          <form className='form-group custom-form' onSubmit={handleLogin}>
+            <label>Email</label>
+            <input
+              type='email'
+              required
+              placeholder='Enter Email'
+              className='form-control'
+              value={email || ''}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <button type='submit' className='btn btn-success btn-md'>
+              {loginLoading ? <span>Logging you in</span> : <span>Login</span>}
+            </button>
+            {loginError !== '' && <div className='error-msg'>{loginError}</div>}
+            {infoMsg !== '' && <div className='info-msg'>{infoMsg}</div>}
+          </form>
+        );
+      };
+      
+      return <div className='box'>{renderContent()}</div>;
+      
 
-    return (
-        <div>
-            {initialLoading ? (
-                <div>Loading...</div>
-            ) : (
-                <>
-                    {initialError !== '' ? (
-                        <div>{initialError}</div>
-                    ) : (
-                        <>
-                            {user ? (
-                                <div> you will be redirected shortly...</div>
-                            ) : (
-                                <form onSubmit={handleLogin}>
-                                    <label>Email</label>
-
-                                    <input type={"email"} required placeholder="Enter Email"
-                                        value={email || ''} onChange={(e) => setEmail(e.target.value)} />
-
-                                    <button type="submit">
-                                        {loginLoading ? (
-                                            <span>Logging you in </span>
-                                        ) : (
-                                            <span>Login</span>
-                                        )}
-                                    </button>
-
-                                    {loginError && <div>{loginError}</div>}
-                                    {infoMsg && <div>{infoMsg}</div>}
-
-
-                                </form>
-                            )}
-                        </>
-                    )}
-                </>
-
-            )}
-
-        </div>
-    )
 }
+
+export { Login };

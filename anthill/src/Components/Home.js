@@ -1,31 +1,49 @@
-import React from 'react';
+import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
 
-export const Home = () => {
-    // starting state is [null, true, undefined]
+const Home = () => {
+
     const [user, loading, error] = useAuthState(auth);
+
+    console.log(error);
 
     const navigate = useNavigate();
 
-    return (
-        <div className="box">
-            {loading ? (
-                <div>Loading...</div>
-            ) : (
+    // logs out user
+    const handleLogout = () => {
+        auth.signOut().then(() => {
+            navigate('/');
+        }).catch((err) => {
+        })
+    }
+    const renderContent = () => {
+        // if user is loading
+        if (loading) {
+            return <div>Loading...</div>;
+        }
+        // logged in
+        if (user) {
+            return (
                 <>
-                    {user ? (
-                        <div>
-                            <h2>Welcome {user.email}</h2>
-                            <button onClick={() => auth.signOut()}>LOGOUT</button>
-                        </div>
-                    ) : (
-                        <button onClick={() => navigate('./login')}>LOGIN</button>
-                    )}
+                    <button className='btn btn-secondary btn-md' onClick={handleLogout}>
+                        LOGOUT
+                    </button>
+                    <h3>Welcome {user.email}</h3>
                 </>
-            )}
-            {error && <p>Error: {error.message}</p>}
-        </div>
-    );
+            );
+        }
+        // not logged in
+        return (
+            <button className='btn btn-primary btn-md' onClick={() => navigate('/login')}>
+                LOGIN
+            </button>
+        );
+    };
+
+    return <div className='box'>{renderContent()}</div>;
+
 }
+
+export { Home };
