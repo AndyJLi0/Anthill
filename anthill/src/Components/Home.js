@@ -1,49 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../FirebaseConfig';
 import { useNavigate } from 'react-router-dom';
+import { Container } from '@mui/material';
+import Dashboard from './Dashboard';
 
 const Home = () => {
-
     const [user, loading, error] = useAuthState(auth);
-
-    console.log(error);
-
     const navigate = useNavigate();
 
-    // logs out user
-    const handleLogout = () => {
-        auth.signOut().then(() => {
-            navigate('/');
-        }).catch((err) => {
-        })
+    useEffect(() => {
+        if (!loading && !user) {
+            navigate('/login');
+        }
+    }, [user, loading, navigate]);
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
-    const renderContent = () => {
-        // if user is loading
-        if (loading) {
-            return <div>Loading...</div>;
-        }
-        // logged in
-        if (user) {
-            return (
-                <>
-                    <button className='btn btn-secondary btn-md' onClick={handleLogout}>
-                        LOGOUT
-                    </button>
-                    <h3>Welcome {user.email}</h3>
-                </>
-            );
-        }
-        // not logged in
-        return (
-            <button className='btn btn-primary btn-md' onClick={() => navigate('/login')}>
-                LOGIN
-            </button>
-        );
-    };
 
-    return <div className='box'>{renderContent()}</div>;
+    if (user) {
+        return <Dashboard user={user} />;
+    }
 
-}
+    return null;
+};
 
 export { Home };

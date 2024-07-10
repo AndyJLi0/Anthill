@@ -3,9 +3,9 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../FirebaseConfig';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
+import { Container, TextField, Button, Typography, CircularProgress, Paper, Box, Grid } from '@mui/material';
 
 const Login = () => {
-
     const [user] = useAuthState(auth);
 
     const navigate = useNavigate();
@@ -26,8 +26,7 @@ const Login = () => {
         if (user) {
             // user is already signed in
             navigate('/');
-        }
-        else {
+        } else {
             // user is not signed in but the link is valid
             if (isSignInWithEmailLink(auth, window.location.href)) {
                 // now in case user clicks the email link on a different device, we will ask for email confirmation
@@ -37,7 +36,7 @@ const Login = () => {
                 }
                 // after that we will complete the login process
                 setInitialLoading(true);
-                signInWithEmailLink(auth, localStorage.getItem('email'), window.location.href)
+                signInWithEmailLink(auth, email, window.location.href)
                     .then((result) => {
                         // we can get the user from result.user but no need in this case
                         console.log(result.user);
@@ -50,8 +49,7 @@ const Login = () => {
                         setInitialError(err.message);
                         navigate('/login');
                     })
-            }
-            else {
+            } else {
                 console.log('enter email and sign in');
             }
         }
@@ -78,40 +76,54 @@ const Login = () => {
     const renderContent = () => {
         // loading
         if (initialLoading) {
-          return <div>Loading...</div>;
+            return <CircularProgress />;
         }
         // error
         if (initialError !== '') {
-          return <div className='error-msg'>{initialError}</div>;
+            return <Typography color="error">{initialError}</Typography>;
         }
         // logged in but redirecting to home
         if (user) {
-          return <div>Please wait...</div>;
+            return <Typography>Please wait...</Typography>;
         }
         // first time users
         return (
-          <form className='form-group custom-form' onSubmit={handleLogin}>
-            <label>Email</label>
-            <input
-              type='email'
-              required
-              placeholder='Enter Email'
-              className='form-control'
-              value={email || ''}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button type='submit' className='btn btn-success btn-md'>
-              {loginLoading ? <span>Logging you in</span> : <span>Login</span>}
-            </button>
-            {loginError !== '' && <div className='error-msg'>{loginError}</div>}
-            {infoMsg !== '' && <div className='info-msg'>{infoMsg}</div>}
-          </form>
+            <Paper elevation={3} style={{ padding: 24, maxWidth: 500, margin: 'auto' }}>
+                <Typography variant="h5" gutterBottom>Sign in to Your Account</Typography>
+                <form onSubmit={handleLogin}>
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Email"
+                        type="email"
+                        variant="outlined"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={loginLoading}
+                        style={{ margin: '16px 0' }}
+                    >
+                        {loginLoading ? <CircularProgress size={24} /> : 'Login'}
+                    </Button>
+                    {loginError !== '' && <Typography color="error">{loginError}</Typography>}
+                    {infoMsg !== '' && <Typography color="primary">{infoMsg}</Typography>}
+                </form>
+            </Paper>
         );
-      };
-      
-      return <div className='box'>{renderContent()}</div>;
-      
+    };
 
+    return (
+        <Container>
+            <Grid container justifyContent="center" style={{ height: '100vh', alignItems: 'center' }}>
+                {renderContent()}
+            </Grid>
+        </Container>
+    );
 }
 
 export { Login };
