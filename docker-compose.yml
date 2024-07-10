@@ -5,24 +5,24 @@ services:
   app:
     image: anthill
     build:
-      context: .
+      context: ./anthill
     ports:
       - '3000:3000'
     volumes:
-      - .:/app
+      - ./anthill:/app
       - /app/node_modules
     command: npm start
 
   server:
     image: server
     build:
-      context: .
+      context: ./server
     ports:
-      - '3001:3000'
+      - '3001:3001'
     volumes:
-      - .:/server
+      - ./server:/server
       - /server/node_modules
-    command: npm run dev
+    command: npm start
 
   ollama:
     image: ollama/ollama:latest
@@ -30,7 +30,7 @@ services:
         - 11434:11434
     volumes:
         - ./ollama/ollama:/root/.ollama
-        - ./entrypoint.sh:/entrypoint.sh
+        - ./anthill/entrypoint.sh:/entrypoint.sh
     container_name: ollama
     pull_policy: always
     tty: true
