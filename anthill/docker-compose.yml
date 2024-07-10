@@ -1,4 +1,6 @@
-version: '3'
+# credit to datawookie for ollama model pull
+# StackOverflow: https://stackoverflow.com/questions/78500319/how-to-pull-model-automatically-with-container-creation
+
 services:
   app:
     image: anthill
@@ -10,3 +12,27 @@ services:
       - .:/app
       - /app/node_modules
     command: npm start
+
+  server:
+    image: server
+    build:
+      context: .
+    ports:
+      - '3001:3000'
+    volumes:
+      - .:/server
+      - /server/node_modules
+    command: npm start
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+        - 11434:11434
+    volumes:
+        - ./ollama/ollama:/root/.ollama
+        - ./entrypoint.sh:/entrypoint.sh
+    container_name: ollama
+    pull_policy: always
+    tty: true
+    restart: always
+    entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
