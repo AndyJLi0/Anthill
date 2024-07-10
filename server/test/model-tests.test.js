@@ -157,7 +157,7 @@ describe('testCases function tested against correct snippets', () => {
 // given the above cases are correct, we can test runTestCases
 // otherwise these tests are meaningless
 // note: tests BACKWARDS from testCases, NOT redundant with above tests
-describe('runTestCases tests correctly', () => {
+describe('runTestCases tests correct functions', () => {
   it('snippet 1 correctly', () => {
     function foo(a, b) {
       return a + b;
@@ -271,12 +271,133 @@ describe('runTestCases tests correctly', () => {
           }
       return bar;
     }
-    
+
     let result = runTestCases(foo, testCases[8]);
     expect(result.passed).to.equal(result.total);
   });
+});
 
+// these tests are slight mutations on the above, such that we can test
+// for cases where functions are wrong. Note that these do not represent
+// complete sets of mutations, which would be more desirable.
+describe('runTestCases tests incorrect functions', () => {
+  it('snippet 1 incorrectly', () => {
+    function foo(a, b) {
+      return a * b;
+    }
 
+    let result = runTestCases(foo, testCases[1]);
+    expect(result.passed).to.equal(result.total - 3);
+  });
+
+  it('snippet 2 incorrectly', () => {
+    function foo(a, b) {
+      if (a < b) {
+          return a;
+      } else {
+          return b;
+      }
+    } 
+
+    let result = runTestCases(foo, testCases[2]);
+    expect(result.passed).to.equal(result.total - 6);
+  });
+
+  it('snippet 3 incorrectly', () => {
+    function foo(x, y) {
+      for (let i = 3; i < x; i++) {
+          y = y + ".";
+          
+      }
+      return y;
+    }
+
+    let result = runTestCases(foo, testCases[3]);
+    expect(result.passed).to.equal(result.total - 2);
+  });
+
+  it('snippet 4 incorrectly', () => {
+    function foo(a, b) {
+      if (b % 2 == 1 && a % 2 == 0) {
+          return true;
+      } else {
+          return false;
+      }
+    }
+
+    let result = runTestCases(foo, testCases[4]);
+    expect(result.passed).to.equal(result.total - 2);
+  });
+
+  it('snippet 5 incorrectly', () => {
+    function foo(a) {
+      let x = 0;
+      for (let i = 1; i <= a; i++) {
+          x *= i;
+      }
+      return x;
+    } 
+
+    const result = runTestCases(foo, testCases[5]);
+    expect(result.passed).to.equal(result.total - 3);
+  });
+
+  it('snippet 6 incorrectly', () => {
+
+    function foo(x) {
+      for (let i = 1; i < x; i++) {
+        if (x % i == 0 && i != 1) 
+          return i;
+        
+      }
+      return 0;
+    }
+
+    let result = runTestCases(foo, testCases[6]);
+    expect(result.passed).to.equal(result.total);
+  });
+
+  it('snippet 7 incorrectly', () => {
+
+    function foo(a, b) {
+      let bar = 1;
+      if (a < b) {
+          for (let x = 1; x <= a; x++) {
+              bar -= x;
+          }
+      } else {
+          for (let x = 1; x <= b; x++) {
+              bar -= x;
+          }
+      }
+      return bar;
+    }
+
+    let result = runTestCases(foo, testCases[7]);
+    expect(result.passed).to.equal(result.total - 4);
+  });
+
+  it('snippet 8 incorrectly', () => {
+
+    function foo(b) {
+      let bar = [];
+      for (let i = 5; i < b; i++) {
+              bar.push(i);
+              if (i != 1) {
+                  for (let j = 1; j < i; j++) {
+                      if (i % j == 0 && j != 1) {
+                          bar.pop();
+                          j = i;
+                      }
+                  }
+              }
+          }
+      return bar;
+    }
+
+    let result = runTestCases(foo, testCases[8]);
+    expect(result.passed).to.equal(result.total - 3);
+  });
 });
 
 // const response = await ollama.chat({
