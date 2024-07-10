@@ -10,7 +10,7 @@ const port = 3001;
 app.use(express.json());
 app.use(cors());
 // Function to pull the model
-async function pullModel(modelName) {
+export async function pullModel(modelName) {
     try {
         console.log(`Pulling model: ${modelName}`);
         await ollama.pull({ model: modelName });
@@ -21,20 +21,72 @@ async function pullModel(modelName) {
 }
 
 // Define test cases for each question
-const testCases = {
+export const testCases = {
     1: [
-        { input: [1, 2], expected: 3 },
-        { input: [5, 5], expected: 10 },
+        { input: [0, 0], expected: 0 },
+        { input: [5, 0], expected: 5 },
+        { input: [0, 9], expected: 9 },
+        { input: [3, 7], expected: 10 }
     ],
     2: [
-        { input: [2, 3], expected: 3 },
-        { input: [21, 10], expected: 21 },
+        { input: [0,  0], expected: 0 },
+        { input: [11, 5], expected: 11 },
+        { input: [2,  9], expected: 9 },
+        { input: [4,  4], expected: 4 },
+        { input: [-2,  -20], expected: -2 },
+        { input: [-37, -5], expected: -5 },
+        { input: [-14, -14], expected: -14 },
+        { input: [17,  -98], expected: 4 },
+        { input: [-3,  11], expected: 4 }
     ],
-    // Add test cases for questions 3-8 similarly
+    3: [
+        { input: [0,  ""], expected: "" },
+        { input: [20, ""], expected: "...................." },
+        { input: [0,  "not an empty string"], expected: "not an empty string" },
+        { input: [13,  "add some periods"], expected: "add some periods............." }
+    ],
+    4: [
+        { input: [7, 3], expected: false},
+        { input: [1, 18], expected: false},
+        { input: [12, 213], expected: false},
+        { input: [200, 16], expected: true}
+    ],
+    5: [
+        { input: 0, expected: 0},
+        { input: 1, expected: 1},
+        { input: 5, expected: 15},
+        { input: 29, expected: 435}
+    ],
+    6: [
+        { input: 4, expected: 2},
+        { input: 105, expected: 3},
+        { input: 709979, expected: 61},
+        { input: 0, expected: 0},
+        { input: 1, expected: 0},
+        { input: 2, expected: 0},
+        { input: 7, expected: 0},
+        { input: 43133, expected: 0}
+    ],
+    7: [
+        { input: [0, 290], expected: 1},
+        { input: [1, 5], expected: 1},
+        { input: [10, 2001], expected: 3628800},
+        { input: [1, 0], expected: 1},
+        { input: [2, 1], expected: 1},
+        { input: [9, 8], expected: 40320}
+    ],
+    8: [
+        { input: 0, expected: [] },
+        { input: 1, expected: [] },
+        { input: 10, expected: [2, 3, 5, 7] },
+        { input: 11, expected: [2, 3, 5, 7] },
+        { input: 12, expected: [2, 3, 5, 7, 11] }  
+    ]
+
 };
 
 // Function to run the code and check against test cases
-function runTestCases(func, cases) {
+export function runTestCases(func, cases) {
     let passed = 0;
     const total = cases.length;
 
