@@ -93,8 +93,17 @@ export function runTestCases(func, cases) {
     for (const testCase of cases) {
         const result = func(...testCase.input);
         console.log(`Running test case: input=${testCase.input}, expected=${testCase.expected}, got=${result}`);
-        if (result === testCase.expected) {
+        if (typeof(result) !== 'object' && result === testCase.expected) {
             passed += 1;
+        } else { // arrays
+            passed += 1;
+            for (let i = 0; i < Math.min(testCase.expected.length, result.length); i++) {
+                if(result[i] !== testCase.expected[i]) {
+                    passed -= 1;
+                    break;
+                }
+                    
+            }
         }
     }
 
