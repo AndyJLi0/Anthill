@@ -36,8 +36,8 @@ export const testCases = {
         { input: [-2,  -20], expected: -2 },
         { input: [-37, -5], expected: -5 },
         { input: [-14, -14], expected: -14 },
-        { input: [17,  -98], expected: 4 },
-        { input: [-3,  11], expected: 4 }
+        { input: [17,  -98], expected: 17 },
+        { input: [-3,  11], expected: 11 }
     ],
     3: [
         { input: [0,  ""], expected: "" },
@@ -52,20 +52,20 @@ export const testCases = {
         { input: [200, 16], expected: true}
     ],
     5: [
-        { input: 0, expected: 0},
-        { input: 1, expected: 1},
-        { input: 5, expected: 15},
-        { input: 29, expected: 435}
+        { input: [0], expected: 0},
+        { input: [1], expected: 1},
+        { input: [5], expected: 15},
+        { input: [29], expected: 435}
     ],
     6: [
-        { input: 4, expected: 2},
-        { input: 105, expected: 3},
-        { input: 709979, expected: 61},
-        { input: 0, expected: 0},
-        { input: 1, expected: 0},
-        { input: 2, expected: 0},
-        { input: 7, expected: 0},
-        { input: 43133, expected: 0}
+        { input: [4], expected: 2},
+        { input: [105], expected: 3},
+        { input: [709979], expected: 61},
+        { input: [0], expected: 0},
+        { input: [1], expected: 0},
+        { input: [2], expected: 0},
+        { input: [7], expected: 0},
+        { input: [43133], expected: 0}
     ],
     7: [
         { input: [0, 290], expected: 1},
@@ -76,11 +76,11 @@ export const testCases = {
         { input: [9, 8], expected: 40320}
     ],
     8: [
-        { input: 0, expected: [] },
-        { input: 1, expected: [] },
-        { input: 10, expected: [2, 3, 5, 7] },
-        { input: 11, expected: [2, 3, 5, 7] },
-        { input: 12, expected: [2, 3, 5, 7, 11] }  
+        { input: [0], expected: [] },
+        { input: [1], expected: [] },
+        { input: [10], expected: [2, 3, 5, 7] },
+        { input: [11], expected: [2, 3, 5, 7] },
+        { input: [12], expected: [2, 3, 5, 7, 11] }  
     ]
 
 };
