@@ -1,10 +1,13 @@
 import express from 'express';
-import ollama from 'ollama';
+import { Ollama } from 'ollama'
 import cors from 'cors';
 
 
 const app = express();
 const port = 3001;
+
+// thank you https://github.com/FlowiseAI/Flowise/issues/2241
+const ollama = new Ollama({ host: 'http://host.docker.internal:11434' })
 
 // Middleware to parse JSON bodies
 app.use(express.json());
