@@ -75,7 +75,7 @@ const Dashboard = ({ user }) => {
                                 </TableCell>
                                 <TableCell>{question.score}</TableCell>
                                 <TableCell>
-                                    <Button variant="contained" onClick={() => navigate(`/question/${question.id}`)}>View</Button>
+                                    <Button key={question.id} variant="contained" onClick={() => navigate(`/question/${question.id}`)}>View</Button>
                                 </TableCell>
                             </TableRow>
                         ))}

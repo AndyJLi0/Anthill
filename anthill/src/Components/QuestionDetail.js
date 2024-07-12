@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Container, Grid, Paper, Box, Typography, TextField, Button, Divider, List, ListItem, ListItemText, Collapse, Chip, ListItemButton } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import axios from 'axios';
+import snippets from '../snippets.json'
 
-const QuestionDetail = ({ questionId }) => {
+const QuestionDetail = ()  => {
+
+    const { id } = useParams(); // Use useParams to get the id from the URL
+    const [snippet, setSnippet] = useState('');
     const [language, setLanguage] = useState('JavaScript');
     const [description, setDescription] = useState('');
     const [email, setEmail] = useState('');
@@ -11,6 +16,25 @@ const QuestionDetail = ({ questionId }) => {
     const [openMedium, setOpenMedium] = useState(true);
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
+
+      
+    useEffect(() => {
+        const fetchSnippet = () => {
+          const key = `snippet${id}`;
+    
+          if (snippets.hasOwnProperty(key)) {
+            const snippetData = snippets[key];
+            if (snippetData) {
+              setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);
+            }
+          } else {
+            console.error(`Snippet with key ${key} not found.`);
+          }
+        };
+    
+        fetchSnippet();
+      }, [id, language]); // Dependencies array
+      
 
     const [previousAttempts] = useState([
         {
@@ -29,13 +53,16 @@ const QuestionDetail = ({ questionId }) => {
 
     const handleLanguageToggle = (lang) => {
         setLanguage(lang);
+        setSnippet(language === 'JavaScript' ? snippets[`snippets${id}`].javascript : snippets[`snippets${id}`].python);
     };
+
 
     const handleSubmit = async () => {
         try {
             const response = await axios.post(`http://localhost:3001/attempt/1`, {
                 email: email,
-                prompt: description
+                prompt: description,
+                question: id
             });
             console.log('Response:', response.data);
             setResultMessage(response.data); // Set the result message from the response
@@ -116,7 +143,7 @@ const QuestionDetail = ({ questionId }) => {
                 </Grid>
                 <Grid item xs={7}>
                     <Paper elevation={3} style={{ padding: 16 }}>
-                        <Typography variant="h6">Question {questionId}</Typography>
+                        <Typography variant="h6">Question {id}</Typography>
                         <Box mt={2}>
                             <Button variant={language === 'JavaScript' ? 'contained' : 'outlined'} onClick={() => handleLanguageToggle('JavaScript')}>
                                 JavaScript
@@ -131,7 +158,7 @@ const QuestionDetail = ({ questionId }) => {
                                 multiline
                                 rows={4}
                                 variant="outlined"
-                                value={language === 'JavaScript' ? 'function foo (a: int, b: int) => { return a + b; }' : 'def foo(a: int, b: int) -> int:\n    return a + b'}
+                                value={snippet}
                                 InputProps={{ readOnly: true }}
                             />
                         </Box>
@@ -187,7 +214,7 @@ const QuestionDetail = ({ questionId }) => {
                             Click 'Submit' below when you're confident in your answer.
                         </Typography>
                         <Typography variant="body2" style={{ marginTop: 16 }}>
-                            Your description will be used to generate a new piece of code, which will be run through some tests. 
+                            Your description will be used to generate a new piece of code, which will be run through some tests.
                             If it passes all of our tests, the code is functionally identical and you get full marks!
                         </Typography>
                         <Typography variant="body2" style={{ marginTop: 16 }}>

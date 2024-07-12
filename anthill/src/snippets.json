@@ -1,0 +1,26 @@
+{
+    "snippet1": {
+        "javascript": "function foo(a, b) { return a + b; }",
+        "python": "def foo(a, b): return a + b"
+    },
+    "snippet2": {
+        "javascript": "function foo(a, b) { if (a > b) { return a; } else { return b; } }",
+        "python": "def foo(a, b): if (a > b): return a else: return b"
+    },
+    "snippet3": {
+        "javascript": "function foo1(x, y) { for (i = 0; i < x; i++) { y = y + \".\"; } return y; }",
+        "python": "def foo(x, y): for i in range(x): y += \".\" return y"
+    },
+    "snippet4": {
+        "javascript": "function foo(a, b) { if (b % 2 == 0 && a % 2 == 0) { return True; } else { return False; } }",
+        "python": "def foo(a, b): return (a % 2 == 0 and b % 2 == 0)"
+    },
+    "snippet5": {
+        "javascript": "function foo(a) { x = 0; for (i = 1; i <= a; i++) { x += i; } return x; }",
+        "python": "def foo(a): x = 0 for i in range(1, a + 1): x += i return x"
+    },
+    "snippet6": {
+        "javascript": "function foo(a, b) { bar = 1; if (a < b) { for (x = 1; x <= a; x++) { bar *= x; } } else { for (x = 1; x <= b; x++) { bar *= x; } } return bar; }",
+        "python": "def foo(a, b): bar = 1 if (a < b): for x in range(1, a + 1): bar *= x else: for x in range(1, b + 1): bar *= x return bar"
+    }
+}
