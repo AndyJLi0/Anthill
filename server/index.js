@@ -142,8 +142,16 @@ app.post('/attempt/:questionId', async (req, res) => {
         console.log('Extracted function code:', functionCode);
 
         // Create the function
+        //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
         const userFunction = new Function('return ' + functionCode)();
         console.log('Generated function:', userFunction);
+
+        if (typeof(userFunction) !== 'function') {
+            const errorMessage = 'The generated function is not valid';
+            console.error(errorMessage);
+            res.status(400).send(errorMessage);
+            return;
+        }
 
         // Get the relevant test cases
         const cases = testCases[questionId];
