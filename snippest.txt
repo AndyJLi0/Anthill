@@ -121,8 +121,56 @@ def foo(a):
 	⁃	Sequential flow
 	⁃	Looping/iteration
 
+Snippet 6 (return the lowest non-one factor of x, otherwise return 0)
+JavaScript
+```
+function foo(x) {
+	for (i = 1; i < x; i++) {
+		if (x % i == 0 && i != 1) 
+			return i;
+		
+	}
+	return 0;
+}
+```
+Python
+```
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+	⁃	Conditional
+	⁃	Looping/iteration
 
-Snippet 6 (return the factorial of the smaller parameter)
+
+Snippet 6 (return the lowest non-one factor of x, otherwise return 0)
+JavaScript
+```
+function foo(x) {
+	for (i = 1; i < x; i++) {
+		if (x % i == 0 && i != 1) 
+			return i;
+		
+	}
+	return 0;
+}
+```
+Python
+```
+def foo(x):
+	for i in range(1, x+1):
+		if (x % i == 0 and i != 1):
+			return i
+	return 0
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+	⁃	Conditional
+	⁃	Looping/iteration
+
+
+Snippet 7 (return the factorial of the smaller parameter)
 JavaScript
 ```
 function foo(a, b) {
@@ -157,3 +205,43 @@ def foo(a, b):
 	⁃	Sequential flow
 	⁃	Looping/iteration
 	⁃	Nested branches
+	
+Snippet 8 (return the prime numbers less than b)
+JavaScript
+```
+function foo(b) {
+    bar = [];
+    for (i = 2; i < b; i++) {
+            bar.push(i);
+            if (i != 1) {
+                for (j = 1; j < i; j++) {
+                    if (i % j == 0 && j != 1) {
+                        bar.pop();
+                        j = i;
+                    }
+                }
+            }
+        }
+    return bar;
+}
+```
+Python
+```
+
+def foo(b):
+	bar = []
+	for i in range(2, b):
+		prime = True
+		for j in range(2, i):
+			if (i % j == 0):
+				prime = False
+		if prime:
+			bar.append(i)
+	return bar
+```
+	⁃	Parameters
+	⁃	Return values
+	⁃	Sequential flow
+	⁃	Looping/iteration
+	⁃	Conditionals
+	⁃	Nested loops
