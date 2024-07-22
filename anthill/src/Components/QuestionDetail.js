@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Grid, Paper, Box, Typography, TextField, Button, Divider, List, ListItem, ListItemText, Collapse, Chip, ListItemButton } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { useEmail } from './EmailContext';
+
+
 import axios from 'axios';
 import snippets from '../snippets.json'
 
-const QuestionDetail = ()  => {
 
+const QuestionDetail = ()  => {
+    const { email } = useEmail();
     const { id } = useParams(); // Use useParams to get the id from the URL
     const [snippet, setSnippet] = useState('');
     const [language, setLanguage] = useState('JavaScript');
     const [description, setDescription] = useState('');
-    const [email, setEmail] = useState('');
     const [openEasy, setOpenEasy] = useState(true);
     const [openMedium, setOpenMedium] = useState(true);
     const [openHard, setOpenHard] = useState(true);
@@ -59,7 +62,7 @@ const QuestionDetail = ()  => {
 
     const handleSubmit = async () => {
         try {
-            const response = await axios.post(`http://localhost:3001/attempt/1`, {
+            const response = await axios.post(`http://localhost:3001/question/${id}`, {
                 email: email,
                 prompt: description,
                 question: id
@@ -94,6 +97,7 @@ const QuestionDetail = ()  => {
                 <Grid item xs={2}>
                     <Paper elevation={3} style={{ padding: 16 }}>
                         <Typography variant="h6">Questions</Typography>
+                        {/* <Typography variant="body1">User Email: {email}, id {id}</Typography> */}
                         <Divider />
                         <List>
                             <ListItemButton onClick={() => handleToggle('Easy')} style={{ backgroundColor: '#d9f7be' }}>
@@ -134,7 +138,7 @@ const QuestionDetail = ()  => {
                                         <ListItemText primary="Question 5" />
                                     </ListItem>
                                     <ListItem button>
-                                        <ListItemText primary="Question 6" />
+                                        <ListItemText primary="Question 6"/>
                                     </ListItem>
                                 </List>
                             </Collapse>
@@ -174,15 +178,6 @@ const QuestionDetail = ()  => {
                             />
                         </Box>
                         <Box mt={2}>
-                            <TextField
-                                fullWidth
-                                variant="outlined"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </Box>
-                        <Box mt={2}>
                             <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                         </Box>
                         {resultMessage && (
@@ -193,7 +188,7 @@ const QuestionDetail = ()  => {
                             </Box>
                         )}
                         <Box mt={4}>
-                            <Typography variant="h6">Previous Attempts</Typography>
+                            <Typography variant="h6">Previous Attempts for {email}</Typography>
                             {previousAttempts.map(attempt => (
                                 <Box key={attempt.id} mt={2}>
                                     <Paper elevation={1} style={{ padding: 16 }}>

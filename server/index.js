@@ -113,11 +113,13 @@ export function runTestCases(func, cases) {
     return { passed, total };
 }
 
-app.post('/attempt/:questionId', async (req, res) => {
-    const { prompt } = req.body;
-    const { questionId } = req.params;
+app.post('/question/:questionId', async (req, res) => {
+    const { email, prompt } = req.body; // Destructure fields directly from req.body
+    const { questionId } = req.params; // Destructure questionId from req.params
     console.log('Received prompt:', prompt);
     console.log('Question ID:', questionId);
+    console.log('User email:', email);
+
 
     const modelName = 'deepseek-coder';
     const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. No prefixes or suffixes, just the code. All on one line`;

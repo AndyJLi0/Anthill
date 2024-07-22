@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Typography, Box, LinearProgress, Avatar } from '@mui/material';
 import { auth } from '../FirebaseConfig';
+import { useEmail } from './EmailContext';
+
 
 const questions = [
     { id: 1, title: 'Question 1', difficulty: 'Easy', score: '0/5' },
@@ -28,6 +30,8 @@ const getChipColor = (difficulty) => {
 };
 
 const Dashboard = ({ user }) => {
+
+    const { email } = useEmail();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -44,13 +48,13 @@ const Dashboard = ({ user }) => {
                 <Toolbar>
                     <Avatar alt="User Picture" src="/static/images/avatar/1.jpg" /> {/* Placeholder for user picture */}
                     <Typography variant="h6" style={{ flexGrow: 1, marginLeft: 16 }}>
-                        Anthill
+                        Anthill {email}
                     </Typography>
                     <Button color="inherit" onClick={handleLogout}>Logout</Button>
                 </Toolbar>
             </AppBar>
             <Box my={4}>
-                <Typography variant="h6">Overall Progress</Typography>
+                <Typography variant="h6">Overall Progress </Typography>
                 <LinearProgress variant="determinate" value={0} />
                 <Typography variant="body2" color="textSecondary">0/8</Typography>
             </Box>
