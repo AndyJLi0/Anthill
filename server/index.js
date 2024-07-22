@@ -98,9 +98,9 @@ export function runTestCases(func, cases) {
         console.log(`Running test case: input=${testCase.input}, expected=${testCase.expected}, got=${result}`);
         if (typeof(result) !== 'object' && result === testCase.expected) {
             passed += 1;
-        } else if (typeof(result) === 'object'){ // arrays
+        } else if (typeof(result) === 'object' && testCase.expected.length === result.length){ // arrays
             passed += 1;
-            for (let i = 0; i < Math.min(testCase.expected.length, result.length); i++) {
+            for (let i = 0; i < testCase.expected.length ; i++) {
                 if(result[i] !== testCase.expected[i]) {
                     passed -= 1;
                     break;
@@ -122,7 +122,7 @@ app.post('/question/:questionId', async (req, res) => {
 
 
     const modelName = 'deepseek-coder';
-    const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. No prefixes or suffixes, just the code. All on one line`;
+    const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. Do not add any comments, and no notes or explainations, just the raw code. No prefixes or suffixes, just the code. All on one line`;
 
     try {
         // Pull the model if it's not already available

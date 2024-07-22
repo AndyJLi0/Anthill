@@ -392,11 +392,11 @@ describe('runTestCases tests incorrect functions', () => {
                   }
               }
           }
-      return bar;
+      return [2];
     }
 
     let result = runTestCases(foo, testCases[8]);
-    expect(result.passed).to.equal(result.total - 3);
+    expect(result.passed).to.equal(result.total - 5);
   });
 });
 
