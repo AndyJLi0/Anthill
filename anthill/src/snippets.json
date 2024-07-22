@@ -22,5 +22,13 @@
     "snippet6": {
         "javascript": "function foo(a, b) { bar = 1; if (a < b) { for (x = 1; x <= a; x++) { bar *= x; } } else { for (x = 1; x <= b; x++) { bar *= x; } } return bar; }",
         "python": "def foo(a, b): bar = 1 if (a < b): for x in range(1, a + 1): bar *= x else: for x in range(1, b + 1): bar *= x return bar"
+    },
+    "snippet7": {
+        "javascript": "function foo(a, b) { bar = 1; if (a < b) { for (x = 1; x <= a; x++) { bar *= x; } } else { for (x = 1; x <= b; x++) { bar *= x; } } return bar; }",
+        "python": "def foo(a, b): bar = 1 if (a < b): for x in range(1, a + 1): bar *= x else: for x in range(1, b + 1): bar *= x return bar"
+    },
+    "snippet8": {
+        "javascript": "function foo(b) { bar = []; for (i = 2; i < b; i++) { bar.push(i); if (i != 1) { for (j = 1; j < i; j++) { if (i % j == 0 && j != 1) { bar.pop(); j = i; } } } } return bar; }",
+        "python": "def foo(b): bar = [] for i in range(2, b): prime = True for j in range(2, i): if (i % j == 0): prime = False if prime: bar.append(i) return bar"
     }
 }
