@@ -166,8 +166,13 @@ app.post('/question/:questionId', async (req, res) => {
 
         // Run the test cases
         const result = runTestCases(userFunction, cases);
-        const responseMessage = `Ollama produced the code: ${functionCode}\n \n${result.passed}/${result.total} test cases passed`;
-        console.log(responseMessage);
+        const responseMessage = {
+            outputCode: functionCode,
+            passed: result.passed,
+            total: result.total
+        };
+        
+        console.log(`${responseMessage.passed}/${responseMessage.total} tests passed`);
 
         res.send(responseMessage);
     } catch (error) {

@@ -222,8 +222,10 @@ const QuestionDetail = ()  => {
                         </Box>
                         {resultMessage && (
                             <Box mt={2}>
+                                <Typography variant="h6">Output</Typography>
                                 <Paper elevation={1} style={{ padding: 16 }}>
-                                    <Typography variant="body1">{resultMessage}</Typography>
+                                    <Typography variant="body2">{`Generated code: ${resultMessage.outputCode}`}</Typography>
+                                    <Chip label={`${resultMessage.passed}/${resultMessage.total} tests passed`} />
                                 </Paper>
                             </Box>
                         )}
@@ -233,8 +235,9 @@ const QuestionDetail = ()  => {
                                 <Box key={attempt.id} mt={2}>
                                     <Paper elevation={1} style={{ padding: 16 }}>
                                         <Typography variant="body2">{`Previous Attempt (${attempt.timestamp})`}</Typography>
-                                        <Typography variant="body2">{attempt.description}</Typography>
-                                        <Chip label={`Score: ${attempt.score}`} />
+                                        <Typography variant="body2">{`Description: ${description}`}</Typography>
+                                        <Typography variant="body2">{`Code Generated: (${resultMessage.outputCode})`}</Typography>
+                                        <Chip label={`Score: ${resultMessage.passed}/${resultMessage.total}`} />
                                     </Paper>
                                 </Box>
                             ))}
