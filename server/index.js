@@ -1,6 +1,16 @@
 import express from 'express';
 import { Ollama } from 'ollama'
 import cors from 'cors';
+import { fileURLToPath } from 'url';
+import path from 'path';
+// import { db } from '../../shared/FirebaseConfig';
+import { doc } from 'firebase/firestore';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const firebaseConfigPath = path.resolve('/shared/FirebaseConfig.mjs');
+const { db } = await import(firebaseConfigPath);
 
 
 const app = express();
@@ -12,6 +22,36 @@ const ollama = new Ollama({ host: 'http://host.docker.internal:11434' })
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cors());
+
+async function databaseLog(email, prompt, questionId, functionCode, result) {
+    console.log("attempting to log");
+    try {
+        // Create a reference to the user's document
+        const userDocRef = doc(db, 'users', email);
+    
+        // Define the log entry
+        const logEntry = {
+          prompt: prompt,
+          questionId: questionId,
+          functionCode: functionCode,
+          result: {
+            passed: result.passed,
+            total: result.total,
+          },
+          timestamp: new Date(),
+        };
+    
+        // Update the user document with the new log entry
+        await updateDoc(userDocRef, {
+          logs: arrayUnion(logEntry),
+        });
+    
+        console.log('log entry added:', logEntry);
+      } catch (error) {
+        console.error('error adding log entry:', error);
+      }
+}
+
 // Function to pull the model
 export async function pullModel(modelName) {
     try {
@@ -88,6 +128,7 @@ export const testCases = {
 
 };
 
+
 // Function to run the code and check against test cases
 export function runTestCases(func, cases) {
     let passed = 0;
@@ -120,54 +161,73 @@ app.post('/question/:questionId', async (req, res) => {
     console.log('Question ID:', questionId);
     console.log('User email:', email);
 
+    
+
 
     const modelName = 'deepseek-coder';
     const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. Do not add any comments, and no notes or explainations, just the raw code. No prefixes or suffixes, just the code. All on one line`;
 
     try {
-        // Pull the model if it's not already available
-        await pullModel(modelName);
+        console.log("here");
+        console.log("here2");
+        // // Pull the model if it's not already available
+        // await pullModel(modelName);
 
-        const response = await ollama.chat({
-            model: modelName,
-            messages: [{ role: 'user', content: fullPrompt }]
-        });
+        // const response = await ollama.chat({
+        //     model: modelName,
+        //     messages: [{ role: 'user', content: fullPrompt }]
+        // });
 
-        console.log('Response from ollama:', response);
+        // console.log('Response from ollama:', response);
 
-        // Extract function code from response and remove triple backticks
-        let functionCode = response.message.content.trim();
-        if (functionCode.startsWith('```javascript') && functionCode.endsWith('```')) {
-            functionCode = functionCode.substring(13, functionCode.length - 3).trim();
-        }
+        // // Extract function code from response and remove triple backticks
+        // let functionCode = response.message.content.trim();
+        // if (functionCode.startsWith('```javascript') && functionCode.endsWith('```')) {
+        //     functionCode = functionCode.substring(13, functionCode.length - 3).trim();
+        // }
 
-        console.log('Extracted function code:', functionCode);
+        // console.log('Extracted function code:', functionCode);
 
-        // Create the function
-        //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
-        const userFunction = new Function('return ' + functionCode)();
-        console.log('Generated function:', userFunction);
+        // // Create the function
+        // //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
+        // const userFunction = new Function('return ' + functionCode)();
+        // console.log('Generated function:', userFunction);
 
-        if (typeof(userFunction) !== 'function') {
-            const errorMessage = 'The generated function is not valid';
-            console.error(errorMessage);
-            res.status(400).send(errorMessage);
-            return;
-        }
+        // if (typeof(userFunction) !== 'function') {
+        //     const errorMessage = 'The generated function is not valid';
+        //     console.error(errorMessage);
+        //     res.status(400).send(errorMessage);
+        //     return;
+        // }
 
-        // Get the relevant test cases
-        const cases = testCases[questionId];
-        if (!cases) {
-            const errorMessage = `No test cases defined for question ${questionId}`;
-            console.error(errorMessage);
-            res.status(400).send(errorMessage);
-            return;
-        }
+        // // Get the relevant test cases
+        // const cases = testCases[questionId];
+        // if (!cases) {
+        //     const errorMessage = `No test cases defined for question ${questionId}`;
+        //     console.error(errorMessage);
+        //     res.status(400).send(errorMessage);
+        //     return;
+        // }
 
-        // Run the test cases
-        const result = runTestCases(userFunction, cases);
-        const responseMessage = `${result.passed}/${result.total} test cases passed`;
-        console.log(responseMessage);
+        // console.log("before running tests");
+
+        // // Run the test cases
+        // const result = runTestCases(userFunction, cases);
+        // const responseMessage = `${result.passed}/${result.total} test cases passed`;
+        // console.log("before resp mess");
+        // console.log(responseMessage);
+
+        const prompt = 'test_prompt';
+        const questionId = 'test_questionId';
+        const functionCode = 'test_functionCode';
+        const test_email = "testEmail@notARealDomain.com";
+        const result = "test_result";
+
+        console.log("before log");
+        // Log result for email's account
+        //TODO: get actual email
+        await databaseLog(test_email, prompt, questionId, functionCode, result);
+        console.log("after log");
 
         res.send(responseMessage);
     } catch (error) {
@@ -183,3 +243,9 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
+
+
+// TODO:
+// try making second config file in server dir
+// OR move all logging functions to anthill/src directory

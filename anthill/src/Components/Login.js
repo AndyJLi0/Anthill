@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../FirebaseConfig';
+import { auth, db } from '../../../shared/FirebaseConfig.mjs';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
 import { Container, TextField, Button, Typography, CircularProgress, Paper, Grid } from '@mui/material';
@@ -23,6 +24,7 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
+            createUserDocument(user);
             navigate('/');
             return;
         }
@@ -36,7 +38,9 @@ const Login = () => {
                 .then(result => {
                     localStorage.removeItem('email');
                     setEmail(email); // SET EMAIL HERE
+                    createUserDocument(result.user);
                     navigate('/');
+
                 })
                 .catch(err => {
                     setInitialError(err.message);
@@ -47,6 +51,7 @@ const Login = () => {
     }, [user, navigate, search, setEmail]);
 
     const handleLogin = async (e) => {
+        createUserDocument(user);
         e.preventDefault();
         setLoginLoading(true);
         try {
@@ -106,5 +111,26 @@ const Login = () => {
         </Container>
     );
 };
+
+const createUserDocument = async (user) => {
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+  
+      if (!userDoc.exists()) {
+        // create a new document for the user
+        await setDoc(userDocRef, {
+          email: user.email,
+          createdAt: new Date(),
+          // add other default fields here
+        });
+        console.log('User document created');
+      } else {
+        console.log('User document already exists.');
+      }
+    } catch (e) {
+      console.error('Error creating user document: ', e);
+    }
+  };
 
 export { Login };

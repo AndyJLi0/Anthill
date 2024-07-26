@@ -13,8 +13,12 @@ COPY package-lock.json ./
 RUN npm install
 # RUN npm install react-scripts@3.4.1 -g 
 
+
 # add server
 COPY . ./
+
+# add shared config
+# COPY ./shared /shared
 
 # start server
 CMD ["npm", "start"]
