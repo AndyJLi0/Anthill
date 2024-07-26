@@ -9,7 +9,7 @@ import { doc } from 'firebase/firestore';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const firebaseConfigPath = path.resolve('/shared/FirebaseConfig.mjs');
+const firebaseConfigPath = path.resolve('/shared/FirebaseConfig.js');
 const { db } = await import(firebaseConfigPath);
 
 
