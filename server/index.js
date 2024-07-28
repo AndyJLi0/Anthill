@@ -3,14 +3,14 @@ import { Ollama } from 'ollama'
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import path from 'path';
-// import { db } from '../../shared/FirebaseConfig';
-import { doc } from 'firebase/firestore';
+import { db } from '../shared/FirebaseConfig.js';
+import { doc, collection } from 'firebase/firestore';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-const firebaseConfigPath = path.resolve('/shared/FirebaseConfig.js');
-const { db } = await import(firebaseConfigPath);
+// const firebaseConfigPath = path.resolve('../shared/FirebaseConfig.js');
+// const { db } = await import(firebaseConfigPath);
 
 
 const app = express();
@@ -24,32 +24,61 @@ app.use(express.json());
 app.use(cors());
 
 async function databaseLog(email, prompt, questionId, functionCode, result) {
-    console.log("attempting to log");
+    console.log("attempting to log: 13");
+    console.log("email: ", email);
+    console.log("prompt: ", prompt);
+    console.log("questionId: ", questionId);
+    console.log("functionCode: ", functionCode);
+    console.log("result: ", result);
+
+
+
+
     try {
         // Create a reference to the user's document
-        const userDocRef = doc(db, 'users', email);
-    
+        console.log("is db undefined? ", db);
+        const userDocRef = collection(db, 'users');
+        console.log("is userDocRef valid? ", userDocRef);
+
+
+        // Get the user document
+        const userDocSnap = await getDoc(userDocRef);
+
         // Define the log entry
         const logEntry = {
-          prompt: prompt,
-          questionId: questionId,
-          functionCode: functionCode,
-          result: {
+            prompt: prompt,
+            questionId: questionId,
+            functionCode: functionCode,
+            result: {
             passed: result.passed,
             total: result.total,
-          },
-          timestamp: new Date(),
-        };
-    
-        // Update the user document with the new log entry
+            },
+            timestamp: new Date(),
+    };
+
+    // Update the user document with the new log entry
+    // await updateDoc(userDocRef, {
+    //     logs: arrayUnion(logEntry),
+    // });
+
+    if (userDocSnap.exists()) {
+        // If the document exists, update it with the new log entry
         await updateDoc(userDocRef, {
-          logs: arrayUnion(logEntry),
+            logs: arrayUnion(logEntry),
         });
-    
-        console.log('log entry added:', logEntry);
-      } catch (error) {
-        console.error('error adding log entry:', error);
-      }
+        console.log('Log entry added to existing document:', logEntry);
+    } else {
+        // If the document does not exist, create it with the log entry
+        await setDoc(userDocRef, {
+            logs: [logEntry],
+        }, { merge: true });
+        console.log('Log entry added to new document:', logEntry);
+    }
+
+    console.log('log entry added:', logEntry);
+    } catch (error) {
+    console.error('error adding log entry:', error);
+    }
 }
 
 // Function to pull the model
@@ -228,7 +257,8 @@ app.post('/question/:questionId', async (req, res) => {
         //TODO: get actual email
         await databaseLog(test_email, prompt, questionId, functionCode, result);
         console.log("after log");
-
+        //TEMP
+        const responseMessage = "fake response msg";
         res.send(responseMessage);
     } catch (error) {
         console.error('Error:', error);

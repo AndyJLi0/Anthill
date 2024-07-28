@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+// import { auth } from '../../../shared/FirebaseConfig.js';
+// import { auth } from '../FirebaseConfig.js';
 import { auth } from '../FirebaseConfig';
+
 import { useNavigate } from 'react-router-dom';
 import { Container } from '@mui/material';
 

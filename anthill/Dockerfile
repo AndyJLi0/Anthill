@@ -21,5 +21,8 @@ COPY . ./
 # add shared config
 # COPY ./shared /shared
 
+# create a symbolic link in the src directory (needed for the src/Components files)
+# RUN ln -s ../../../shared/FirebaseConfig.js FirebaseConfig.js
+
 # start app
 CMD ["npm", "start"]

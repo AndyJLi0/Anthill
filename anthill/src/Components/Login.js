@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth, db } from '../../../shared/FirebaseConfig.js';
+// import { auth, db } from '../../../shared/FirebaseConfig.js';
+// import { auth } from 'src/FirebaseConfig.js';
+import { auth, db } from '../FirebaseConfig';
+
+
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
