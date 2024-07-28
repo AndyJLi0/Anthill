@@ -4,7 +4,7 @@ import cors from 'cors';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { db } from '../shared/FirebaseConfig.js';
-import { doc, collection } from 'firebase/firestore';
+import { doc, collection, getFirestore, addDoc } from 'firebase/firestore';
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -16,12 +16,28 @@ import { doc, collection } from 'firebase/firestore';
 const app = express();
 const port = 3001;
 
+// const db = getFirestore(sharedApp);
+
 // thank you https://github.com/FlowiseAI/Flowise/issues/2241
 const ollama = new Ollama({ host: 'http://host.docker.internal:11434' })
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 app.use(cors());
+
+// Testing out db by attempting to write to it same as FirebaseConfig.js
+async function initializeData() {
+    try {
+        await addDoc(collection(db, 'testCollection'), {
+        someField: 'someValue FROM INDEX'
+        });
+        console.log('Document successfully written');
+    } catch (e) {
+        console.error('Error adding document: ', e);
+    }
+}
+  
+initializeData();
 
 async function databaseLog(email, prompt, questionId, functionCode, result) {
     console.log("attempting to log: 13");
@@ -32,12 +48,14 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
     console.log("result: ", result);
 
 
-
-
     try {
         // Create a reference to the user's document
         console.log("is db undefined? ", db);
-        const userDocRef = collection(db, 'users');
+        // console.log("is db correct type?", db && typeof db === 'object' && db._delegate && db._delegate._firestoreClient);
+        console.log("is db correct type?", db && typeof db === 'object');
+        
+
+        const userDocRef = doc(db, 'users');
         console.log("is userDocRef valid? ", userDocRef);
 
 

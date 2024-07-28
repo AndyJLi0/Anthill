@@ -39,4 +39,4 @@ initializeData();
 
 console.log("here's what db looks like!", db);
 
-export { auth, db };
+export { auth, db, app };
