@@ -8,8 +8,12 @@ import { useEmail } from './EmailContext';
 import axios from 'axios';
 import snippets from '../snippets.json'
 
+import { doc, getDoc } from "firebase/firestore";
+import { db } from '../../../shared/FirebaseConfig';
 
-const QuestionDetail = ()  => {
+
+
+const QuestionDetail = () => {
     const { email } = useEmail();
     const { id } = useParams(); // Use useParams to get the id from the URL
     const [snippet, setSnippet] = useState('');
@@ -20,24 +24,35 @@ const QuestionDetail = ()  => {
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
 
-      
+    const getUsers = async () => {
+        const docRef = doc(db, "users");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+        } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }
+
     useEffect(() => {
+        getUsers();
         const fetchSnippet = () => {
-          const key = `snippet${id}`;
-    
-          if (snippets.hasOwnProperty(key)) {
-            const snippetData = snippets[key];
-            if (snippetData) {
-              setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);
+            const key = `snippet${id}`;
+
+            if (snippets.hasOwnProperty(key)) {
+                const snippetData = snippets[key];
+                if (snippetData) {
+                    setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);
+                }
+            } else {
+                console.error(`Snippet with key ${key} not found.`);
             }
-          } else {
-            console.error(`Snippet with key ${key} not found.`);
-          }
         };
-    
+
         fetchSnippet();
-      }, [id, language]); // Dependencies array
-      
+    }, [id, language]); // Dependencies array
+
 
     const [previousAttempts] = useState([
         {
@@ -138,7 +153,7 @@ const QuestionDetail = ()  => {
                                         <ListItemText primary="Question 5" />
                                     </ListItem>
                                     <ListItem button>
-                                        <ListItemText primary="Question 6"/>
+                                        <ListItemText primary="Question 6" />
                                     </ListItem>
                                 </List>
                             </Collapse>
