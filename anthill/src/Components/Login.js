@@ -3,7 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 // import { auth, db } from '../../../shared/FirebaseConfig.js';
 // import { auth } from 'src/FirebaseConfig.js';
 // import { auth, db } from '../FirebaseConfig';
-import { auth, db } from 'shared_configs/FirebaseConfig';
+import { auth, db } from '../FirebaseConfig';
 
 
 

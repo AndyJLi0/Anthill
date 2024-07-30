@@ -9,7 +9,7 @@ import axios from 'axios';
 import snippets from '../snippets.json'
 
 import { doc, getDoc } from "firebase/firestore";
-import { db } from '../../../shared/FirebaseConfig';
+import { db } from '../FirebaseConfig';
 
 
 

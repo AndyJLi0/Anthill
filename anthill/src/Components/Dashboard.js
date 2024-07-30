@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Typography, Box, LinearProgress, Avatar } from '@mui/material';
-import { auth } from 'shared_configs/FirebaseConfig';
+import { auth } from '../FirebaseConfig';
+
 import { useEmail } from './EmailContext';
 
 const questions = [
