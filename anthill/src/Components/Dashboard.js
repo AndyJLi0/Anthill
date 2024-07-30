@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Typography, Box, LinearProgress, Avatar } from '@mui/material';
 import { auth } from 'shared_configs/FirebaseConfig';
 import { useEmail } from './EmailContext';
-
 
 const questions = [
     { id: 1, title: 'Question 1', difficulty: 'Easy', score: '0/5' },
