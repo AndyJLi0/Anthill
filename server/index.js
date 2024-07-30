@@ -234,9 +234,9 @@ export function runTestCases(func, cases) {
         resultString += `Test case ${testCaseNum}: Inputs: ${testCase.input}, Expected Output: ${testCase.expected}, Actual Output: ${result}, Result: ${outcome}; `;
         testCaseNum++;
     }
-    passTotal = `${passed}/${total}`;
+    const passTotal = `${passed}/${total}`;
 
-    return { resultString, passTotal };
+    return [resultString, passTotal];
 }
 
 app.post('/question/:questionId', async (req, res) => {
@@ -296,8 +296,8 @@ app.post('/question/:questionId', async (req, res) => {
         const result = runTestCases(userFunction, cases);
         const responseMessage = {
             outputCode: functionCode,
-            outputInfo: result,
-            score: result.passTotal
+            outputInfo: result[0],          // test case output string
+            score: result[1]                // score of number of tests passed/total number of tests
         };
 
         console.log(result);
