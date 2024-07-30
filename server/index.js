@@ -296,7 +296,12 @@ app.post('/question/:questionId', async (req, res) => {
 
         // Run the test cases
         const result = runTestCases(userFunction, cases);
-        const responseMessage = `${result.passed}/${result.total} test cases passed`;
+        const responseMessage = {
+            outputCode: functionCode,
+            passed: result.passed,
+            total: result.total
+        };
+        // const responseMessage = `${result.passed}/${result.total} test cases passed`;
         console.log("before resp mess");
         console.log(responseMessage);
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Container, Grid, Paper, Box, Typography, TextField, Button, Divider, List, ListItem, ListItemText, Collapse, Chip, ListItemButton } from '@mui/material';
+import { Container, Grid, Paper, Box, Typography, TextField, Button, Divider, List, ListItem, ListItemText, Collapse, Chip, ListItemButton, AppBar, Toolbar, Avatar } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useEmail } from './EmailContext';
 
@@ -9,7 +10,7 @@ import axios from 'axios';
 import snippets from '../snippets.json'
 
 import { doc, getDoc } from "firebase/firestore";
-import { db } from '../FirebaseConfig';
+import { db, auth } from '../FirebaseConfig';
 
 
 
@@ -23,6 +24,8 @@ const QuestionDetail = () => {
     const [openMedium, setOpenMedium] = useState(true);
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
+    const navigate = useNavigate();
+    const aardvark = 'aardvark.svg';
 
     const getUsers = async () => {
         const docRef = doc(db, "users");
@@ -106,8 +109,27 @@ const QuestionDetail = () => {
         }
     };
 
+    const handleLogout = () => {
+        auth.signOut().then(() => {
+            navigate('/');
+        }).catch((err) => {
+            console.error(err);
+        });
+    };
+
     return (
         <Container>
+            <AppBar position="static" color="default">
+                <Toolbar>
+                    <Avatar alt="User Picture" src="/static/images/avatar/1.jpg" /> {/* Placeholder for user picture */}
+                    <Button color="inherit" onClick={() => navigate(`/`)}>
+                    <Typography variant="h7" style={{ flexGrow: 1, marginLeft: 0 }}>
+                        Anthill {email}
+                    </Typography>
+                    </Button>
+                    <Button color="inherit" onClick={handleLogout}>Logout</Button>
+                </Toolbar>
+            </AppBar>
             <Grid container spacing={2}>
                 <Grid item xs={2}>
                     <Paper elevation={3} style={{ padding: 16 }}>
@@ -121,11 +143,14 @@ const QuestionDetail = () => {
                             </ListItemButton>
                             <Collapse in={openEasy} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItem button>
+                                    <ListItem button onClick={() => navigate(`/question/1`)}>
                                         <ListItemText primary="Question 1" />
                                     </ListItem>
-                                    <ListItem button>
+                                    <ListItem button onClick={() => navigate(`/question/2`)}>
                                         <ListItemText primary="Question 2" />
+                                    </ListItem>
+                                    <ListItem button onClick={() => navigate(`/question/3`)}>
+                                        <ListItemText primary="Question 3" />
                                     </ListItem>
                                 </List>
                             </Collapse>
@@ -135,11 +160,14 @@ const QuestionDetail = () => {
                             </ListItemButton>
                             <Collapse in={openMedium} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItem button>
-                                        <ListItemText primary="Question 3" />
-                                    </ListItem>
-                                    <ListItem button>
+                                    <ListItem button onClick={() => navigate(`/question/4`)}>
                                         <ListItemText primary="Question 4" />
+                                    </ListItem>
+                                    <ListItem button onClick={() => navigate(`/question/5`)}>
+                                        <ListItemText primary="Question 5" />
+                                    </ListItem>
+                                    <ListItem button onClick={() => navigate(`/question/6`)}>
+                                        <ListItemText primary="Question 6" />
                                     </ListItem>
                                 </List>
                             </Collapse>
@@ -149,11 +177,11 @@ const QuestionDetail = () => {
                             </ListItemButton>
                             <Collapse in={openHard} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItem button>
-                                        <ListItemText primary="Question 5" />
+                                    <ListItem button onClick={() => navigate(`/question/7`)}>
+                                        <ListItemText primary="Question 7" />
                                     </ListItem>
-                                    <ListItem button>
-                                        <ListItemText primary="Question 6" />
+                                    <ListItem button onClick={() => navigate(`/question/8`)}>
+                                        <ListItemText primary="Question 8"/>
                                     </ListItem>
                                 </List>
                             </Collapse>
@@ -195,10 +223,12 @@ const QuestionDetail = () => {
                         <Box mt={2}>
                             <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                         </Box>
+                        <Typography variant="h6">Results</Typography>
                         {resultMessage && (
                             <Box mt={2}>
                                 <Paper elevation={1} style={{ padding: 16 }}>
-                                    <Typography variant="body1">{resultMessage}</Typography>
+                                    <Typography variant="body1">{resultMessage.outputCode}</Typography>
+                                    <Typography variant="body1">{`${resultMessage.passed}/${resultMessage.total} tests passed`}</Typography>
                                 </Paper>
                             </Box>
                         )}
