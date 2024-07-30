@@ -3,8 +3,12 @@ import { Ollama } from 'ollama'
 import cors from 'cors';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { db } from '../shared/FirebaseConfig.js';
-import { doc, collection, getFirestore, addDoc } from 'firebase/firestore';
+// import { db, auth } from '../shared/FirebaseConfig.js';
+import { doc, collection, getFirestore, addDoc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
+
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -15,6 +19,25 @@ import { doc, collection, getFirestore, addDoc } from 'firebase/firestore';
 
 const app = express();
 const port = 3001;
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDmxHi0ePlXnK-R9mshM_f6f6uL_9ZB0Lw",
+    authDomain: "anthill-976f5.firebaseapp.com",
+    projectId: "anthill-976f5",
+    storageBucket: "anthill-976f5.appspot.com",
+    messagingSenderId: "404854557178",
+    appId: "1:404854557178:web:ba19d53bbac68de0773c43",
+    measurementId: "G-HX6JM48RCP"
+};
+// Initialize Firebase
+const app_firebase = initializeApp(firebaseConfig);
+
+const auth = getAuth(app_firebase);
+
+console.log("before db init");
+// Initialize Firestore
+const db = getFirestore(app_firebase);
 
 // const db = getFirestore(sharedApp);
 
@@ -40,7 +63,7 @@ async function initializeData() {
 initializeData();
 
 async function databaseLog(email, prompt, questionId, functionCode, result) {
-    console.log("attempting to log: 13");
+    console.log("attempting to log:");
     console.log("email: ", email);
     console.log("prompt: ", prompt);
     console.log("questionId: ", questionId);
@@ -50,13 +73,13 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
 
     try {
         // Create a reference to the user's document
-        console.log("is db undefined? ", db);
+        // console.log("is db undefined? ", db);
         // console.log("is db correct type?", db && typeof db === 'object' && db._delegate && db._delegate._firestoreClient);
-        console.log("is db correct type?", db && typeof db === 'object');
+        // console.log("is db correct type?", db && typeof db === 'object');
         
 
-        const userDocRef = doc(db, 'users');
-        console.log("is userDocRef valid? ", userDocRef);
+        const userDocRef = doc(db, 'users', email);
+        // console.log("is userDocRef valid? ", userDocRef);
 
 
         // Get the user document
@@ -71,8 +94,22 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
             passed: result.passed,
             total: result.total,
             },
-            timestamp: new Date(),
-    };
+            timestamp: new Date()
+        };
+
+        //TEMP:
+        // const logEntry = {
+        //     prompt: prompt,
+        //     questionId: questionId,
+        //     functionCode: functionCode,
+        //     result: {
+        //     passed: 0,
+        //     total: 0,
+        //     },
+        //     timestamp: new Date()
+        // };
+
+    console.log(logEntry);
 
     // Update the user document with the new log entry
     // await updateDoc(userDocRef, {
@@ -215,68 +252,68 @@ app.post('/question/:questionId', async (req, res) => {
     const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. Do not add any comments, and no notes or explainations, just the raw code. No prefixes or suffixes, just the code. All on one line`;
 
     try {
-        console.log("here");
-        console.log("here2");
-        // // Pull the model if it's not already available
-        // await pullModel(modelName);
+        // console.log("here");
+        // Pull the model if it's not already available
+        await pullModel(modelName);
 
-        // const response = await ollama.chat({
-        //     model: modelName,
-        //     messages: [{ role: 'user', content: fullPrompt }]
-        // });
+        const response = await ollama.chat({
+            model: modelName,
+            messages: [{ role: 'user', content: fullPrompt }]
+        });
 
-        // console.log('Response from ollama:', response);
+        console.log('Response from ollama:', response);
 
-        // // Extract function code from response and remove triple backticks
-        // let functionCode = response.message.content.trim();
-        // if (functionCode.startsWith('```javascript') && functionCode.endsWith('```')) {
-        //     functionCode = functionCode.substring(13, functionCode.length - 3).trim();
-        // }
+        // Extract function code from response and remove triple backticks
+        let functionCode = response.message.content.trim();
+        if (functionCode.startsWith('```javascript') && functionCode.endsWith('```')) {
+            functionCode = functionCode.substring(13, functionCode.length - 3).trim();
+        }
 
-        // console.log('Extracted function code:', functionCode);
+        console.log('Extracted function code:', functionCode);
 
-        // // Create the function
-        // //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
-        // const userFunction = new Function('return ' + functionCode)();
-        // console.log('Generated function:', userFunction);
+        // Create the function
+        //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
+        const userFunction = new Function('return ' + functionCode)();
+        console.log('Generated function:', userFunction);
 
-        // if (typeof(userFunction) !== 'function') {
-        //     const errorMessage = 'The generated function is not valid';
-        //     console.error(errorMessage);
-        //     res.status(400).send(errorMessage);
-        //     return;
-        // }
+        if (typeof(userFunction) !== 'function') {
+            const errorMessage = 'The generated function is not valid';
+            console.error(errorMessage);
+            res.status(400).send(errorMessage);
+            return;
+        }
 
-        // // Get the relevant test cases
-        // const cases = testCases[questionId];
-        // if (!cases) {
-        //     const errorMessage = `No test cases defined for question ${questionId}`;
-        //     console.error(errorMessage);
-        //     res.status(400).send(errorMessage);
-        //     return;
-        // }
+        // Get the relevant test cases
+        const cases = testCases[questionId];
+        if (!cases) {
+            const errorMessage = `No test cases defined for question ${questionId}`;
+            console.error(errorMessage);
+            res.status(400).send(errorMessage);
+            return;
+        }
 
         // console.log("before running tests");
 
-        // // Run the test cases
-        // const result = runTestCases(userFunction, cases);
-        // const responseMessage = `${result.passed}/${result.total} test cases passed`;
-        // console.log("before resp mess");
-        // console.log(responseMessage);
+        // Run the test cases
+        const result = runTestCases(userFunction, cases);
+        const responseMessage = `${result.passed}/${result.total} test cases passed`;
+        console.log("before resp mess");
+        console.log(responseMessage);
 
-        const prompt = 'test_prompt';
-        const questionId = 'test_questionId';
-        const functionCode = 'test_functionCode';
-        const test_email = "testEmail@notARealDomain.com";
-        const result = "test_result";
 
-        console.log("before log");
+        //TEMP for testing
+        // const prompt = 'test_prompt';
+        // const questionId = 'test_questionId';
+        // const functionCode = 'test_functionCode';
+        // const test_email = "testEmail@notARealDomain.com";
+        // const result = "test_result";
+        // const responseMessage = "fake response";
+
+        // console.log("before log");
         // Log result for email's account
         //TODO: get actual email
-        await databaseLog(test_email, prompt, questionId, functionCode, result);
-        console.log("after log");
-        //TEMP
-        const responseMessage = "fake response msg";
+        await databaseLog(email, prompt, questionId, functionCode, result);
+        // console.log("after log");
         res.send(responseMessage);
     } catch (error) {
         console.error('Error:', error);

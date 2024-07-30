@@ -10,6 +10,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@firebase/app": "^0.10.7",
+    "@firebase/auth": "^1.7.5",
+    "@firebase/firestore": "^4.6.4",
     "firebase": "^10.12.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.4"
   }
 }

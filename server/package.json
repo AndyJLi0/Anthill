@@ -19,5 +19,9 @@
     "mocha": "^10.6.0",
     "nodemon": "^3.1.4",
     "ollama": "^0.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.4"
   }
 }
