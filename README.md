@@ -40,3 +40,4 @@ cd server
    ```
    (NOTE: one test fails if the server is already running, ignore this case unless the application is not running)
 
+test
