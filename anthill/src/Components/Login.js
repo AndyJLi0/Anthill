@@ -28,6 +28,8 @@ const Login = () => {
     const [initialLoading, setInitialLoading] = useState(false);
     const [initialError, setInitialError] = useState('');
 
+
+    
     useEffect(() => {
         if (user) {
             createUserDocument(user);
@@ -44,7 +46,8 @@ const Login = () => {
                 .then(result => {
                     localStorage.removeItem('email');
                     setEmail(email); // SET EMAIL HERE
-                    createUserDocument(result.user);
+                    createUserDocument(email);
+                    
                     navigate('/');
 
                 })
@@ -118,25 +121,26 @@ const Login = () => {
     );
 };
 
-const createUserDocument = async (user) => {
+const createUserDocument = async (email) => {
     try {
-      const userDocRef = doc(db, 'users', user.uid);
-      const userDoc = await getDoc(userDocRef);
-  
-      if (!userDoc.exists()) {
-        // create a new document for the user
-        await setDoc(userDocRef, {
-          email: user.email,
-          createdAt: new Date(),
-          // add other default fields here
-        });
-        console.log('User document created');
-      } else {
-        console.log('User document already exists.');
-      }
+        const userDocRef = doc(db, 'users', email);
+        const userDoc = await getDoc(userDocRef);
+
+        if (!userDoc.exists()) {
+            // create a new document for the user
+            await setDoc(userDocRef, 
+                {
+                    key: 0,
+                    isTeacher: false
+                });
+            console.log('User document created');
+        } else {
+            console.log('User document already exists.');
+        }
+
     } catch (e) {
-      console.error('Error creating user document: ', e);
+        console.error('Error creating user document: ', e);
     }
-  };
+};
 
 export { Login };

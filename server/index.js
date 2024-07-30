@@ -109,11 +109,6 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
 
     console.log(logEntry);
 
-    // Update the user document with the new log entry
-    // await updateDoc(userDocRef, {
-    //     logs: arrayUnion(logEntry),
-    // });
-
     if (userDocSnap.exists()) {
         // If the document exists, update it with the new log entry
         await updateDoc(userDocRef, {
