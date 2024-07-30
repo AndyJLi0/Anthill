@@ -20,6 +20,7 @@ const QuestionDetail = () => {
     const [snippet, setSnippet] = useState('');
     const [language, setLanguage] = useState('JavaScript');
     const [description, setDescription] = useState('');
+    const [rationale, setRationale] = useState('');
     const [openEasy, setOpenEasy] = useState(true);
     const [openMedium, setOpenMedium] = useState(true);
     const [openHard, setOpenHard] = useState(true);
@@ -221,16 +222,30 @@ const QuestionDetail = () => {
                             />
                         </Box>
                         <Box mt={2}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={4}
+                                variant="outlined"
+                                placeholder="Rationale"
+                                value={rationale}
+                                onChange={(e) => setRationale(e.target.value)}
+                            />
+                        </Box>
+                        <Box mt={2}>
                             <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                         </Box>
-                        <Typography variant="h6">Results</Typography>
                         {resultMessage && (
                             <Box mt={2}>
                                 <Paper elevation={1} style={{ padding: 16 }}>
+                                    <Typography variant="h5">Generated Code</Typography>
                                     <Typography variant="body1">{resultMessage.outputCode}</Typography>
-                                    <Typography variant="body1">{`${resultMessage.passed}/${resultMessage.total} tests passed`}</Typography>
+                                    <Typography variant="h5">Test Results</Typography>
+                                    <Typography variant="body1">{resultMessage.outputInfo}</Typography>
+                                    <Chip label={`Score: ${resultMessage.score} tests passed`} />
                                 </Paper>
                             </Box>
+                            
                         )}
                         <Box mt={4}>
                             <Typography variant="h6">Previous Attempts for {email}</Typography>

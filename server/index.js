@@ -210,25 +210,33 @@ export const testCases = {
 export function runTestCases(func, cases) {
     let passed = 0;
     const total = cases.length;
+    
+    let resultString = "";
+    let testCaseNum = 1;
 
     for (const testCase of cases) {
         const result = func(...testCase.input);
+        let outcome = "Fail";
         console.log(`Running test case: input=${testCase.input}, expected=${testCase.expected}, got=${result}`);
         if (typeof(result) !== 'object' && result === testCase.expected) {
             passed += 1;
+            outcome = "Pass";
         } else if (typeof(result) === 'object' && testCase.expected.length === result.length){ // arrays
             passed += 1;
             for (let i = 0; i < testCase.expected.length ; i++) {
                 if(result[i] !== testCase.expected[i]) {
                     passed -= 1;
                     break;
-                }
-                    
+                }     
             }
+            outcome = "Pass";
         }
+        resultString += `Test case ${testCaseNum}: Inputs: ${testCase.input}, Expected Output: ${testCase.expected}, Actual Output: ${result}, Result: ${outcome}; `;
+        testCaseNum++;
     }
+    passTotal = `${passed}/${total}`;
 
-    return { passed, total };
+    return { resultString, passTotal };
 }
 
 app.post('/question/:questionId', async (req, res) => {
@@ -237,9 +245,6 @@ app.post('/question/:questionId', async (req, res) => {
     console.log('Received prompt:', prompt);
     console.log('Question ID:', questionId);
     console.log('User email:', email);
-
-    
-
 
     const modelName = 'deepseek-coder';
     const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. Do not add any comments, and no notes or explainations, just the raw code. No prefixes or suffixes, just the code. All on one line`;
@@ -291,12 +296,11 @@ app.post('/question/:questionId', async (req, res) => {
         const result = runTestCases(userFunction, cases);
         const responseMessage = {
             outputCode: functionCode,
-            passed: result.passed,
-            total: result.total
+            outputInfo: result,
+            score: result.passTotal
         };
-        // const responseMessage = `${result.passed}/${result.total} test cases passed`;
-        console.log("before resp mess");
-        console.log(responseMessage);
+
+        console.log(result);
 
 
         //TEMP for testing
