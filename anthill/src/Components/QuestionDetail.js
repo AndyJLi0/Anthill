@@ -84,7 +84,8 @@ const QuestionDetail = () => {
             const response = await axios.post(`http://localhost:3001/question/${id}`, {
                 email: email,
                 prompt: description,
-                question: id
+                question: id,
+                rationale: rationale
             });
             console.log('Response:', response.data);
             setResultMessage(response.data); // Set the result message from the response

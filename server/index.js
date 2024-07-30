@@ -50,23 +50,28 @@ app.use(cors());
 async function initializeData() {
     try {
         await addDoc(collection(db, 'testCollection'), {
-        someField: 'someValue FROM INDEX'
+            someField: 'someValue FROM INDEX'
         });
         console.log('Document successfully written');
     } catch (e) {
         console.error('Error adding document: ', e);
     }
 }
-  
+
+function toInt(char) {
+    return parseInt(char, 10);
+}
+
 initializeData();
 
-async function databaseLog(email, prompt, questionId, functionCode, result) {
+async function databaseLog(email, prompt, questionId, functionCode, result, rationale) {
     console.log("attempting to log:");
     console.log("email: ", email);
     console.log("prompt: ", prompt);
     console.log("questionId: ", questionId);
     console.log("functionCode: ", functionCode);
     console.log("result: ", result);
+    console.log("rationale: ", rationale);
 
 
     try {
@@ -74,7 +79,7 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
         // console.log("is db undefined? ", db);
         // console.log("is db correct type?", db && typeof db === 'object' && db._delegate && db._delegate._firestoreClient);
         // console.log("is db correct type?", db && typeof db === 'object');
-        
+
 
         const userDocRef = doc(collection(db, 'users'), email);
         // console.log("is userDocRef valid? ", userDocRef);
@@ -82,16 +87,19 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
 
         // Get the user document
         const userDocSnap = await getDoc(userDocRef);
+        
+        let result_object = {
+            passed: toInt(result[1][0]),
+            total: toInt(result[1][2])
+        };
 
         // Define the log entry
         const logEntry = {
             prompt: prompt,
             questionId: questionId,
             functionCode: functionCode,
-            result: {
-            passed: result.passed,
-            total: result.total,
-            },
+            result: result_object,
+            rationale: rationale,
             timestamp: new Date()
         };
 
@@ -107,25 +115,25 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
         //     timestamp: new Date()
         // };
 
-    console.log(logEntry);
+        console.log(logEntry);
 
-    if (userDocSnap.exists()) {
-        // If the document exists, update it with the new log entry
-        await updateDoc(userDocRef, {
-            logs: arrayUnion(logEntry),
-        });
-        console.log('Log entry added to existing document:', logEntry);
-    } else {
-        // If the document does not exist, create it with the log entry
-        await setDoc(userDocRef, {
-            logs: [logEntry],
-        }, { merge: true });
-        console.log('Log entry added to new document:', logEntry);
-    }
+        if (userDocSnap.exists()) {
+            // If the document exists, update it with the new log entry
+            await updateDoc(userDocRef, {
+                logs: arrayUnion(logEntry),
+            });
+            console.log('Log entry added to existing document:', logEntry);
+        } else {
+            // If the document does not exist, create it with the log entry
+            await setDoc(userDocRef, {
+                logs: [logEntry],
+            }, { merge: true });
+            console.log('Log entry added to new document:', logEntry);
+        }
 
-    console.log('log entry added:', logEntry);
+        console.log('log entry added:', logEntry);
     } catch (error) {
-    console.error('error adding log entry:', error);
+        console.error('error adding log entry:', error);
     }
 }
 
@@ -149,58 +157,58 @@ export const testCases = {
         { input: [3, 7], expected: 10 }
     ],
     2: [
-        { input: [0,  0], expected: 0 },
+        { input: [0, 0], expected: 0 },
         { input: [11, 5], expected: 11 },
-        { input: [2,  9], expected: 9 },
-        { input: [4,  4], expected: 4 },
-        { input: [-2,  -20], expected: -2 },
+        { input: [2, 9], expected: 9 },
+        { input: [4, 4], expected: 4 },
+        { input: [-2, -20], expected: -2 },
         { input: [-37, -5], expected: -5 },
         { input: [-14, -14], expected: -14 },
-        { input: [17,  -98], expected: 17 },
-        { input: [-3,  11], expected: 11 }
+        { input: [17, -98], expected: 17 },
+        { input: [-3, 11], expected: 11 }
     ],
     3: [
-        { input: [0,  ""], expected: "" },
+        { input: [0, ""], expected: "" },
         { input: [20, ""], expected: "...................." },
-        { input: [0,  "not an empty string"], expected: "not an empty string" },
-        { input: [13,  "add some periods"], expected: "add some periods............." }
+        { input: [0, "not an empty string"], expected: "not an empty string" },
+        { input: [13, "add some periods"], expected: "add some periods............." }
     ],
     4: [
-        { input: [7, 3], expected: false},
-        { input: [1, 18], expected: false},
-        { input: [12, 213], expected: false},
-        { input: [200, 16], expected: true}
+        { input: [7, 3], expected: false },
+        { input: [1, 18], expected: false },
+        { input: [12, 213], expected: false },
+        { input: [200, 16], expected: true }
     ],
     5: [
-        { input: [0], expected: 0},
-        { input: [1], expected: 1},
-        { input: [5], expected: 15},
-        { input: [29], expected: 435}
+        { input: [0], expected: 0 },
+        { input: [1], expected: 1 },
+        { input: [5], expected: 15 },
+        { input: [29], expected: 435 }
     ],
     6: [
-        { input: [4], expected: 2},
-        { input: [105], expected: 3},
-        { input: [709979], expected: 61},
-        { input: [0], expected: 0},
-        { input: [1], expected: 0},
-        { input: [2], expected: 0},
-        { input: [7], expected: 0},
-        { input: [43133], expected: 0}
+        { input: [4], expected: 2 },
+        { input: [105], expected: 3 },
+        { input: [709979], expected: 61 },
+        { input: [0], expected: 0 },
+        { input: [1], expected: 0 },
+        { input: [2], expected: 0 },
+        { input: [7], expected: 0 },
+        { input: [43133], expected: 0 }
     ],
     7: [
-        { input: [0, 290], expected: 1},
-        { input: [1, 5], expected: 1},
-        { input: [10, 2001], expected: 3628800},
-        { input: [1, 0], expected: 1},
-        { input: [2, 1], expected: 1},
-        { input: [9, 8], expected: 40320}
+        { input: [0, 290], expected: 1 },
+        { input: [1, 5], expected: 1 },
+        { input: [10, 2001], expected: 3628800 },
+        { input: [1, 0], expected: 1 },
+        { input: [2, 1], expected: 1 },
+        { input: [9, 8], expected: 40320 }
     ],
     8: [
         { input: [0], expected: [] },
         { input: [1], expected: [] },
         { input: [10], expected: [2, 3, 5, 7] },
         { input: [11], expected: [2, 3, 5, 7] },
-        { input: [12], expected: [2, 3, 5, 7, 11] }  
+        { input: [12], expected: [2, 3, 5, 7, 11] }
     ]
 
 };
@@ -210,7 +218,7 @@ export const testCases = {
 export function runTestCases(func, cases) {
     let passed = 0;
     const total = cases.length;
-    
+
     let resultString = "";
     let testCaseNum = 1;
 
@@ -218,16 +226,16 @@ export function runTestCases(func, cases) {
         const result = func(...testCase.input);
         let outcome = "Fail";
         console.log(`Running test case: input=${testCase.input}, expected=${testCase.expected}, got=${result}`);
-        if (typeof(result) !== 'object' && result === testCase.expected) {
+        if (typeof (result) !== 'object' && result === testCase.expected) {
             passed += 1;
             outcome = "Pass";
-        } else if (typeof(result) === 'object' && testCase.expected.length === result.length){ // arrays
+        } else if (typeof (result) === 'object' && testCase.expected.length === result.length) { // arrays
             passed += 1;
-            for (let i = 0; i < testCase.expected.length ; i++) {
-                if(result[i] !== testCase.expected[i]) {
+            for (let i = 0; i < testCase.expected.length; i++) {
+                if (result[i] !== testCase.expected[i]) {
                     passed -= 1;
                     break;
-                }     
+                }
             }
             outcome = "Pass";
         }
@@ -240,11 +248,13 @@ export function runTestCases(func, cases) {
 }
 
 app.post('/question/:questionId', async (req, res) => {
-    const { email, prompt } = req.body; // Destructure fields directly from req.body
+    const { email, prompt , id, rationale} = req.body; // Destructure fields directly from req.body
     const { questionId } = req.params; // Destructure questionId from req.params
     console.log('Received prompt:', prompt);
     console.log('Question ID:', questionId);
     console.log('User email:', email);
+    console.log('Another Id should be same:', id);
+    console.log('User rationale:', rationale);
 
     const modelName = 'deepseek-coder';
     const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. Do not add any comments, and no notes or explainations, just the raw code. No prefixes or suffixes, just the code. All on one line`;
@@ -274,7 +284,7 @@ app.post('/question/:questionId', async (req, res) => {
         const userFunction = new Function('return ' + functionCode)();
         console.log('Generated function:', userFunction);
 
-        if (typeof(userFunction) !== 'function') {
+        if (typeof (userFunction) !== 'function') {
             const errorMessage = 'The generated function is not valid';
             console.error(errorMessage);
             res.status(400).send(errorMessage);
@@ -314,7 +324,7 @@ app.post('/question/:questionId', async (req, res) => {
         // console.log("before log");
         // Log result for email's account
         //TODO: get actual email
-        await databaseLog(email, prompt, questionId, functionCode, result);
+        await databaseLog(email, prompt, questionId, functionCode, result, rationale);
         // console.log("after log");
         res.send(responseMessage);
     } catch (error) {
