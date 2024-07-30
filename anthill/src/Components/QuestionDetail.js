@@ -25,7 +25,7 @@ const QuestionDetail = () => {
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
     const navigate = useNavigate();
-    const aardvark = 'aardvark.svg';
+    // const aardvark = 'aardvark.svg';
 
     const getUsers = async () => {
         const docRef = doc(db, "users");

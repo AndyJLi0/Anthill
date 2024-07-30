@@ -1,8 +1,6 @@
 import express from 'express';
 import { Ollama } from 'ollama'
 import cors from 'cors';
-import { fileURLToPath } from 'url';
-import path from 'path';
 // import { db, auth } from '../shared/FirebaseConfig.js';
 import { doc, collection, getFirestore, addDoc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
@@ -78,7 +76,7 @@ async function databaseLog(email, prompt, questionId, functionCode, result) {
         // console.log("is db correct type?", db && typeof db === 'object');
         
 
-        const userDocRef = doc(db, 'users', email);
+        const userDocRef = doc(collection(db, 'users'), email);
         // console.log("is userDocRef valid? ", userDocRef);
 
 
