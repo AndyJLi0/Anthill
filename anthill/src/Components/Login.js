@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../FirebaseConfig';
-
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
-import { Container, TextField, Button, Typography, CircularProgress, Paper, Grid } from '@mui/material';
+import { Container, TextField, Button, Typography, CircularProgress, Paper, Grid, Checkbox, FormControlLabel } from '@mui/material';
 import { useEmail } from './EmailContext';
 
 const Login = () => {
     const [user] = useAuthState(auth);
     const { email, setEmail } = useEmail();
-
     const navigate = useNavigate();
     const location = useLocation();
     const { search } = location;
 
     const [inputEmail, setInputEmail] = useState('');
+    const [isTeacher, setIsTeacher] = useState(false);
+    const [key, setKey] = useState('');
     const [loginLoading, setLoginLoading] = useState(false);
     const [loginError, setLoginError] = useState('');
     const [infoMsg, setInfoMsg] = useState('');
@@ -32,7 +32,7 @@ const Login = () => {
             try {
                 const result = await signInWithEmailLink(auth, email, window.location.href);
                 localStorage.removeItem('email');
-                setEmail(email); // SET EMAIL HERE
+                setEmail(email);
                 createUserDocument(email);
                 navigate('/');
             } catch (err) {
@@ -44,10 +44,7 @@ const Login = () => {
         }
     };
 
-
-
     const handleLogin = async (e) => {
-        createUserDocument(user);
         e.preventDefault();
         setLoginLoading(true);
         try {
@@ -56,7 +53,9 @@ const Login = () => {
                 handleCodeInApp: true,
             });
             localStorage.setItem('email', inputEmail);
-            setInfoMsg('We have sent you an email with a link to sign in. You may saftely close this window.');
+            localStorage.setItem('isTeacher', isTeacher);
+            localStorage.setItem('key', key);
+            setInfoMsg('We have sent you an email with a link to sign in. You may safely close this window.');
         } catch (err) {
             setLoginError(err.message);
         } finally {
@@ -82,6 +81,26 @@ const Login = () => {
                         value={inputEmail}
                         onChange={(e) => setInputEmail(e.target.value)}
                     />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Teacher's Email"
+                        type="text"
+                        variant="outlined"
+                        value={key}
+                        onChange={(e) => setKey(e.target.value)}
+                        disabled={isTeacher}
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isTeacher}
+                                onChange={(e) => setIsTeacher(e.target.checked)}
+                                name="isTeacher"
+                            />
+                        }
+                        label="Are you a Teacher?"
+                    />
                     <Button
                         fullWidth
                         variant="contained"
@@ -105,24 +124,24 @@ const Login = () => {
             const userDoc = await getDoc(userDocRef);
 
             if (!userDoc.exists()) {
-                // create a new document for the user
-                await setDoc(userDocRef,
-                    {
-                        key: 0,
-                        isTeacher: false
-                    });
+                const isTeacher = localStorage.getItem('isTeacher') === 'true';
+                const key = localStorage.getItem('key') || '0';
+                await setDoc(userDocRef, {
+                    key: key,
+                    isTeacher: isTeacher
+                });
                 console.log('User document created');
+                localStorage.removeItem('isTeacher');
+                localStorage.removeItem('key');
             } else {
                 console.log('User document already exists.');
             }
-
         } catch (e) {
             console.error('Error creating user document: ', e);
         }
     };
 
     useEffect(() => {
-
         handleSignInWithEmailLink();
     }, [user, navigate, search, setEmail]);
 
@@ -134,7 +153,5 @@ const Login = () => {
         </Container>
     );
 };
-
-
 
 export { Login };
