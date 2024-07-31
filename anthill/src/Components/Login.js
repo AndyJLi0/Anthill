@@ -116,47 +116,14 @@ const Login = () => {
                     {loginError && <Typography color="error">{loginError}</Typography>}
                     {infoMsg && <Typography color="primary">{infoMsg}</Typography>}
                 </form>
-                <Typography variant="h6" align="center">or</Typography>
-                    <Typography variant="h5" gutterBottom>Sign up with a Cohort Key</Typography>
-                    <form onSubmit={handleLogin}>
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            label="email@domain.com"
-                            type="email"
-                            variant="outlined"
-                            value={inputEmail}
-                            onChange={(e) => setInputEmail(e.target.value)}
-                        />
-                        <TextField
-                            fullWidth
-                            margin="normal"
-                            label="Cohort Key (Optional)"
-                            variant="outlined"
-                            value={key}
-                            onChange={(e) => setKey(e.target.value)}
-                        />
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            type="submit"
-                            disabled={loginLoading}
-                            style={{ margin: '16px 0' }}
-                        >
-                            {loginLoading ? <CircularProgress size={24} /> : 'Sign up'}
-                        </Button>
-                        {loginError && <Typography color="error">{loginError}</Typography>}
-                        {infoMsg && <Typography color="primary">{infoMsg}</Typography>}
-                    </form>
-                    <FormGroup>
-                        <FormControlLabel control={<Checkbox />} label="By clicking here you agree to our Privacy Policy" />
-                    </FormGroup>
-                    <Stack alignItems="center" direction="row" gap={2}>
-                        <Info/>
-                        <Typography variant="body1">{privacyMessage}</Typography>
-                    </Stack>
-                </Paper>
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox />} label="By clicking here you agree to our Privacy Policy" />
+                </FormGroup>
+                <Stack alignItems="center" direction="row" gap={2}>
+                    <Info/>
+                    <Typography variant="body1">{privacyMessage}</Typography>
+                </Stack>
+            </Paper>
         );
     };
 
