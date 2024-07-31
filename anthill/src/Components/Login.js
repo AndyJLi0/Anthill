@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-// import { auth, db } from '../../../shared/FirebaseConfig.js';
-// import { auth } from 'src/FirebaseConfig.js';
-// import { auth, db } from '../FirebaseConfig';
 import { auth, db } from '../FirebaseConfig';
-
-
 
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -28,36 +23,28 @@ const Login = () => {
     const [initialLoading, setInitialLoading] = useState(false);
     const [initialError, setInitialError] = useState('');
 
-
-    
-    useEffect(() => {
-        if (user) {
-            createUserDocument(user);
-            navigate('/');
-            return;
-        }
-
+    const handleSignInWithEmailLink = async () => {
         if (isSignInWithEmailLink(auth, window.location.href)) {
             let email = localStorage.getItem('email') || window.prompt('Please provide your email');
             if (!email) return;
 
             setInitialLoading(true);
-            signInWithEmailLink(auth, email, window.location.href)
-                .then(result => {
-                    localStorage.removeItem('email');
-                    setEmail(email); // SET EMAIL HERE
-                    createUserDocument(email);
-                    
-                    navigate('/');
-
-                })
-                .catch(err => {
-                    setInitialError(err.message);
-                    navigate('/login');
-                })
-                .finally(() => setInitialLoading(false));
+            try {
+                const result = await signInWithEmailLink(auth, email, window.location.href);
+                localStorage.removeItem('email');
+                setEmail(email); // SET EMAIL HERE
+                createUserDocument(email);
+                navigate('/');
+            } catch (err) {
+                setInitialError(err.message);
+                navigate('/login');
+            } finally {
+                setInitialLoading(false);
+            }
         }
-    }, [user, navigate, search, setEmail]);
+    };
+
+
 
     const handleLogin = async (e) => {
         createUserDocument(user);
@@ -69,7 +56,7 @@ const Login = () => {
                 handleCodeInApp: true,
             });
             localStorage.setItem('email', inputEmail);
-            setInfoMsg('We have sent you an email with a link to sign in');
+            setInfoMsg('We have sent you an email with a link to sign in. You may saftely close this window.');
         } catch (err) {
             setLoginError(err.message);
         } finally {
@@ -112,6 +99,33 @@ const Login = () => {
         );
     };
 
+    const createUserDocument = async (email) => {
+        try {
+            const userDocRef = doc(db, 'users', email);
+            const userDoc = await getDoc(userDocRef);
+
+            if (!userDoc.exists()) {
+                // create a new document for the user
+                await setDoc(userDocRef,
+                    {
+                        key: 0,
+                        isTeacher: false
+                    });
+                console.log('User document created');
+            } else {
+                console.log('User document already exists.');
+            }
+
+        } catch (e) {
+            console.error('Error creating user document: ', e);
+        }
+    };
+
+    useEffect(() => {
+
+        handleSignInWithEmailLink();
+    }, [user, navigate, search, setEmail]);
+
     return (
         <Container>
             <Grid container justifyContent="center" style={{ height: '100vh', alignItems: 'center' }}>
@@ -121,26 +135,6 @@ const Login = () => {
     );
 };
 
-const createUserDocument = async (email) => {
-    try {
-        const userDocRef = doc(db, 'users', email);
-        const userDoc = await getDoc(userDocRef);
 
-        if (!userDoc.exists()) {
-            // create a new document for the user
-            await setDoc(userDocRef, 
-                {
-                    key: 0,
-                    isTeacher: false
-                });
-            console.log('User document created');
-        } else {
-            console.log('User document already exists.');
-        }
-
-    } catch (e) {
-        console.error('Error creating user document: ', e);
-    }
-};
 
 export { Login };

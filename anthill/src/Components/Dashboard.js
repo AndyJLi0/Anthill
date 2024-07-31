@@ -15,9 +15,10 @@ const questions = [
     { id: 5, title: 'Question 5', difficulty: 'Medium', score: 'Incomplete' },
     { id: 6, title: 'Question 6', difficulty: 'Medium', score: 'Incomplete' },
     { id: 7, title: 'Question 7', difficulty: 'Hard', score: 'Incomplete' },
-    { id: 8, title: 'Question 8', difficulty: 'Hard', score: 'Incomplete' },  
+    { id: 8, title: 'Question 8', difficulty: 'Hard', score: 'Incomplete' },
 ];
 
+// Helper function to get the color of the chip based on the difficulty
 const getChipColor = (difficulty) => {
     switch (difficulty) {
         case 'Easy':
@@ -30,7 +31,7 @@ const getChipColor = (difficulty) => {
             return 'default';
     }
 };
-
+// Dashboard component
 const Dashboard = ({ user }) => {
 
     const { email } = useEmail();
@@ -45,47 +46,47 @@ const Dashboard = ({ user }) => {
             console.error(err);
         });
     };
+    
+    // Function to update question status based on user logs
+    const fetchTestResults = async () => {
+        try {
+            if (!email) {
+                console.error("Email is null or undefined");
+                return;
+            }
 
-    useEffect(() => {
-        const fetchTestResults = async () => {
-            try {
-                if (!email) {
-                    console.error("Email is null or undefined");
-                    return;
-                }
+            const userDocRef = doc(db, 'users', email);
+            const userDocSnap = await getDoc(userDocRef);
 
-                const userDocRef = doc(db, 'users', email);
-                const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                const logs = userData.logs || [];
 
-                if (userDocSnap.exists()) {
-                    const userData = userDocSnap.data();
-                    const logs = userData.logs || [];
+                const updatedQuestions = questions.map((question) => {
+                    let highestScore = null;
 
-                    const updatedQuestions = questions.map((question) => {
-                        let highestScore = null;
-
-                        logs.forEach(log => {
-                            if (Number(log.questionId) === Number(question.id)) {
-                                if (!highestScore || log.result.passed > highestScore.passed) {
-                                    highestScore = log.result;
-                                }
+                    logs.forEach(log => {
+                        if (Number(log.questionId) === Number(question.id)) {
+                            if (!highestScore || log.result.passed > highestScore.passed) {
+                                highestScore = log.result;
                             }
-                        });
-
-                        const score = highestScore ? `${highestScore.passed}/${highestScore.total}` : 'Incomplete';
-                        // console.log(`new score: ${score} for question ${question.id}`);
-                        return { ...question, score };
+                        }
                     });
 
-                    setQuestionScores(updatedQuestions);
-                } else {
-                    console.log("no such document!");
-                }
-            } catch (error) {
-                console.error("Error fetching test results: ", error);
-            }
-        };
+                    const score = highestScore ? `${highestScore.passed}/${highestScore.total}` : 'Incomplete';
+                    return { ...question, score };
+                });
 
+                setQuestionScores(updatedQuestions);
+            } else {
+                console.log("no such document!");
+            }
+        } catch (error) {
+            console.error("Error fetching test results: ", error);
+        }
+    };
+
+    useEffect(() => {
         fetchTestResults();
     }, [email, window.location]);
 

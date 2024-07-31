@@ -40,3 +40,4 @@ cd server
    ```
    (NOTE: one test fails if the server is already running, ignore this case unless the application is not running)
 
+## Note: Questions 5 and above are inconsistent due to the limitations of the LLM and given time restrictions.

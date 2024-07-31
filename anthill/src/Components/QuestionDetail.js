@@ -9,7 +9,7 @@ import { useEmail } from './EmailContext';
 import axios from 'axios';
 import snippets from '../snippets.json'
 
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection } from "firebase/firestore";
 import { db, auth } from '../FirebaseConfig';
 
 
@@ -25,75 +25,72 @@ const QuestionDetail = () => {
     const [openMedium, setOpenMedium] = useState(true);
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
+    const [previousAttempts, setPreviousAttempts] = useState([]);
     const navigate = useNavigate();
     // const aardvark = 'aardvark.svg';
 
-    const getUsers = async () => {
-        const docRef = doc(db, "users");
+
+    // gets the previous attempts from firestore
+    const fetchPreviousAttempts = async () => {
+        const docRef = doc(db, 'users', email);
         const docSnap = await getDoc(docRef);
+
         if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+            const data = docSnap.data();
+            setPreviousAttempts(data.logs || []);
         } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
+            console.log('No such document!');
         }
-    }
+    };
 
-    useEffect(() => {
-        getUsers();
-        const fetchSnippet = () => {
-            const key = `snippet${id}`;
+    // gets the snippet from the json file
+    const fetchSnippet = () => {
+        const key = `snippet${id}`;
 
-            if (snippets.hasOwnProperty(key)) {
-                const snippetData = snippets[key];
-                if (snippetData) {
-                    setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);
-                }
-            } else {
-                console.error(`Snippet with key ${key} not found.`);
+        if (snippets.hasOwnProperty(key)) {
+            const snippetData = snippets[key];
+            if (snippetData) {
+                setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);
             }
-        };
-
-        fetchSnippet();
-    }, [id, language]); // Dependencies array
-
-
-    const [previousAttempts] = useState([
-        {
-            id: 1,
-            timestamp: '12:30, 01/01/2023',
-            description: 'A function called foo that takes two integer arguments a and b and returns them added together.',
-            score: '4/5'
-        },
-        {
-            id: 2,
-            timestamp: '14:45, 02/01/2023',
-            description: 'A function called foo that takes two integer arguments a and b and returns the sum of a and b.',
-            score: '5/5'
+        } else {
+            console.error(`Snippet with key ${key} not found.`);
         }
-    ]);
+    };
 
+    // toggles between javascript and python snippets
     const handleLanguageToggle = (lang) => {
         setLanguage(lang);
-        setSnippet(language === 'JavaScript' ? snippets[`snippets${id}`].javascript : snippets[`snippets${id}`].python);
+        const key = `snippet${id}`;
+        if (snippets.hasOwnProperty(key)) {
+            const snippetData = snippets[key];
+            if (snippetData) {
+                setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);    // copied here from above, silences warning
+            }
+        } else {
+            console.error(`Snippet with key ${key} not found.`);
+        }
     };
 
 
+    // submits the description and rationale to the backend
     const handleSubmit = async () => {
         try {
             const response = await axios.post(`http://localhost:3001/question/${id}`, {
                 email: email,
                 prompt: description,
-                question: id
+                question: id,
+                rationale: rationale
             });
             console.log('Response:', response.data);
-            setResultMessage(response.data); // Set the result message from the response
+            setResultMessage(response.data);
         } catch (error) {
             console.error('Error submitting description:', error);
             setResultMessage('Error submitting description. Please try again.');
         }
+
     };
 
+    // toggles the question difficulty
     const handleToggle = (difficulty) => {
         switch (difficulty) {
             case 'Easy':
@@ -110,6 +107,7 @@ const QuestionDetail = () => {
         }
     };
 
+    // logs the user out
     const handleLogout = () => {
         auth.signOut().then(() => {
             navigate('/');
@@ -118,15 +116,31 @@ const QuestionDetail = () => {
         });
     };
 
+    // formats the timestamp
+    const formatTimestamp = (timestamp) => {
+        if (timestamp && timestamp.seconds) {
+            const date = new Date(timestamp.seconds * 1000);
+            return date.toLocaleString(); // Adjust this to your preferred format
+        }
+        return timestamp;
+    };
+
+
+    useEffect(() => {
+        fetchPreviousAttempts();
+        fetchSnippet();
+    }, [id, language]); // Dependencies array
+
+
     return (
         <Container>
             <AppBar position="static" color="default">
                 <Toolbar>
                     <Avatar alt="User Picture" src="/static/images/avatar/1.jpg" /> {/* Placeholder for user picture */}
                     <Button color="inherit" onClick={() => navigate(`/`)}>
-                    <Typography variant="h7" style={{ flexGrow: 1, marginLeft: 0 }}>
-                        Anthill {email}
-                    </Typography>
+                        <Typography variant="h7" style={{ flexGrow: 1, marginLeft: 0 }}>
+                            Anthill {email}
+                        </Typography>
                     </Button>
                     <Button color="inherit" onClick={handleLogout}>Logout</Button>
                 </Toolbar>
@@ -182,7 +196,7 @@ const QuestionDetail = () => {
                                         <ListItemText primary="Question 7" />
                                     </ListItem>
                                     <ListItem button onClick={() => navigate(`/question/8`)}>
-                                        <ListItemText primary="Question 8"/>
+                                        <ListItemText primary="Question 8" />
                                     </ListItem>
                                 </List>
                             </Collapse>
@@ -242,22 +256,36 @@ const QuestionDetail = () => {
                                     <Typography variant="body1">{resultMessage.outputCode}</Typography>
                                     <Typography variant="h5">Test Results</Typography>
                                     <Typography variant="body1">{resultMessage.outputInfo}</Typography>
-                                    <Chip label={`Score: ${resultMessage.score} tests passed`} />
+                                    {resultMessage.score !== undefined && (
+                                        <Chip label={`Score: ${resultMessage.score} tests passed`} />
+                                    )}
                                 </Paper>
                             </Box>
-                            
+
                         )}
                         <Box mt={4}>
                             <Typography variant="h6">Previous Attempts for {email}</Typography>
-                            {previousAttempts.map(attempt => (
-                                <Box key={attempt.id} mt={2}>
-                                    <Paper elevation={1} style={{ padding: 16 }}>
-                                        <Typography variant="body2">{`Previous Attempt (${attempt.timestamp})`}</Typography>
-                                        <Typography variant="body2">{attempt.description}</Typography>
-                                        <Chip label={`Score: ${attempt.score}`} />
-                                    </Paper>
-                                </Box>
-                            ))}
+                            {previousAttempts
+                                .filter(attempt => attempt.questionId === id)
+                                .map((attempt, index) => (
+                                    <Box key={index} mt={2}>
+                                        <Paper elevation={1} style={{ padding: 16 }}>
+                                            <Typography variant="body2">
+                                                <strong>Previous Attempt:</strong> {formatTimestamp(attempt.timestamp)}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                <strong>Prompt:</strong> {attempt.prompt}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                <strong>Generated Code:</strong> {attempt.functionCode}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                <strong>Rationale:</strong> {attempt.rationale}
+                                            </Typography>
+                                            <Chip label={`Score: ${attempt.result.passed} / ${attempt.result.total}`} />
+                                        </Paper>
+                                    </Box>
+                                ))}
                         </Box>
                     </Paper>
                 </Grid>
