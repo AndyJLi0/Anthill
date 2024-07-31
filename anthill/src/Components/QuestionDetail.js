@@ -9,7 +9,7 @@ import { useEmail } from './EmailContext';
 import axios from 'axios';
 import snippets from '../snippets.json'
 
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection } from "firebase/firestore";
 import { db, auth } from '../FirebaseConfig';
 
 
@@ -25,22 +25,10 @@ const QuestionDetail = () => {
     const [openMedium, setOpenMedium] = useState(true);
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
+    const [previousAttempt, setPreviousAttempt] = useState('');
     const navigate = useNavigate();
-    // const aardvark = 'aardvark.svg';
-
-    const getUsers = async () => {
-        const docRef = doc(db, "users");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-        } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }
 
     useEffect(() => {
-        getUsers();
         const fetchSnippet = () => {
             const key = `snippet${id}`;
 
@@ -57,25 +45,44 @@ const QuestionDetail = () => {
         fetchSnippet();
     }, [id, language]); // Dependencies array
 
+    // previous attempt object
+    const previousAttempts = [];
+    // const logEntry = {
+    //     prompt: prompt,
+    //     questionId: questionId,
+    //     functionCode: functionCode,
+    //     result: result_object,
+    //     rationale: rationale,
+    //     timestamp: new Date()
+    // };
 
-    const [previousAttempts] = useState([
-        {
-            id: 1,
-            timestamp: '12:30, 01/01/2023',
-            description: 'A function called foo that takes two integer arguments a and b and returns them added together.',
-            score: '4/5'
-        },
-        {
-            id: 2,
-            timestamp: '14:45, 02/01/2023',
-            description: 'A function called foo that takes two integer arguments a and b and returns the sum of a and b.',
-            score: '5/5'
+    const handlePreviousAttempts = () => {
+        const userRef = doc(collection(db, 'users'), email);
+        const userLogsRef = collection(userRef, 'logs');
+        const userSnap = userLogsRef.get();
+        if (userSnap.exists()) {
+            userSnap.forEach( doc => {
+                setPreviousAttempt(doc.data);
+                previousAttempts.push(previousAttempt);
+            })
+        } else {
+            console.log('No previous attempts!');
         }
-    ]);
+    };
+    handlePreviousAttempts();
+        
 
     const handleLanguageToggle = (lang) => {
         setLanguage(lang);
-        setSnippet(language === 'JavaScript' ? snippets[`snippets${id}`].javascript : snippets[`snippets${id}`].python);
+        const key = `snippet${id}`;
+        if (snippets.hasOwnProperty(key)) {
+            const snippetData = snippets[key];
+            if (snippetData) {
+                setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);    // copied here from above, silences warning
+            }
+        } else {
+            console.error(`Snippet with key ${key} not found.`);
+        }
     };
 
 
@@ -93,6 +100,7 @@ const QuestionDetail = () => {
             console.error('Error submitting description:', error);
             setResultMessage('Error submitting description. Please try again.');
         }
+        
     };
 
     const handleToggle = (difficulty) => {
@@ -254,8 +262,9 @@ const QuestionDetail = () => {
                                 <Box key={attempt.id} mt={2}>
                                     <Paper elevation={1} style={{ padding: 16 }}>
                                         <Typography variant="body2">{`Previous Attempt (${attempt.timestamp})`}</Typography>
-                                        <Typography variant="body2">{attempt.description}</Typography>
-                                        <Chip label={`Score: ${attempt.score}`} />
+                                        <Typography variant="body2">{attempt.prompt}</Typography>
+                                        <Typography variant="body2">{attempt.functionCode}</Typography>
+                                        <Chip label={`Score: ${attempt.result[1]}`} />
                                     </Paper>
                                 </Box>
                             ))}
