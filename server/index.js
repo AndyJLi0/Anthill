@@ -250,34 +250,34 @@ app.post('/question/:questionId', async (req, res) => {
     try {
         // console.log("here");
         // Pull the model if it's not already available
-        await pullModel(modelName);
+             await pullModel(modelName);
 
-        const response = await ollama.chat({
-            model: modelName,
-            messages: [{ role: 'user', content: fullPrompt }]
-        });
-
-        console.log('Response from ollama:', response);
-
-        // Extract function code from response and remove triple backticks
-        let functionCode = response.message.content.trim();
-        if (functionCode.startsWith('```javascript') && functionCode.endsWith('```')) {
-            functionCode = functionCode.substring(13, functionCode.length - 3).trim();
-        }
-
-        console.log('Extracted function code:', functionCode);
-
-        // Create the function
-        //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
-        const userFunction = new Function('return ' + functionCode)();
-        console.log('Generated function:', userFunction);
-
-        if (typeof (userFunction) !== 'function') {
-            const errorMessage = 'The generated function is not valid';
-            console.error(errorMessage);
-            res.status(400).send(errorMessage);
-            return;
-        }
+            const response = await ollama.chat({
+                model: modelName,
+                messages: [{ role: 'user', content: fullPrompt }]
+            });
+    
+            console.log('Response from ollama:', response);
+    
+            // Extract function code from response and remove triple backticks
+            let functionCode = response.message.content.trim();
+            if (functionCode.startsWith('```javascript') && functionCode.endsWith('```')) {
+                functionCode = functionCode.substring(13, functionCode.length - 3).trim();
+            }
+    
+            console.log('Extracted function code:', functionCode);
+    
+            // Create the function
+            //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
+            const userFunction = new Function('return ' + functionCode)();
+            console.log('Generated function:', userFunction);
+    
+            if (typeof (userFunction) !== 'function') {
+                const errorMessage = 'The generated function is not valid';
+                console.error(errorMessage);
+                res.status(400).send(errorMessage);
+                return;
+            }  
 
         // Get the relevant test cases
         const cases = testCases[questionId];
@@ -313,7 +313,6 @@ app.post('/question/:questionId', async (req, res) => {
         // Log result for email's account
         //TODO: get actual email
         await databaseLog(email, prompt, questionId, functionCode, result, rationale);
-        // console.log("after log");
         res.send(responseMessage);
     } catch (error) {
         console.error('Error:', error);
@@ -328,9 +327,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
-
-
-
-// TODO:
-// try making second config file in server dir
-// OR move all logging functions to anthill/src directory

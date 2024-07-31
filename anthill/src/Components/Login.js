@@ -4,7 +4,8 @@ import { auth, db } from '../FirebaseConfig';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
-import { Container, TextField, Button, Typography, CircularProgress, Paper, Grid, Checkbox, FormControlLabel } from '@mui/material';
+import { Container, TextField, Button, Typography, CircularProgress, Paper, Grid, Checkbox, FormGroup, FormControlLabel, Tooltip, IconButton, Divider, Stack } from '@mui/material';
+import { Info } from '@mui/icons-material';
 import { useEmail } from './EmailContext';
 
 const Login = () => {
@@ -22,6 +23,7 @@ const Login = () => {
     const [infoMsg, setInfoMsg] = useState('');
     const [initialLoading, setInitialLoading] = useState(false);
     const [initialError, setInitialError] = useState('');
+    const privacyMessage = 'We will collect and store your email and a cohort key to make an account specific to you. This will allow you to keep track of your progress as you work through the problem set. If you do not wish for us to store your email we will not be able to create an account for you and the app will not work as intended.';
 
     const handleSignInWithEmailLink = async () => {
         if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -75,7 +77,7 @@ const Login = () => {
                     <TextField
                         fullWidth
                         margin="normal"
-                        label="Email"
+                        label="email@domain.com"
                         type="email"
                         variant="outlined"
                         value={inputEmail}
@@ -114,7 +116,47 @@ const Login = () => {
                     {loginError && <Typography color="error">{loginError}</Typography>}
                     {infoMsg && <Typography color="primary">{infoMsg}</Typography>}
                 </form>
-            </Paper>
+                <Typography variant="h6" align="center">or</Typography>
+                    <Typography variant="h5" gutterBottom>Sign up with a Cohort Key</Typography>
+                    <form onSubmit={handleLogin}>
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="email@domain.com"
+                            type="email"
+                            variant="outlined"
+                            value={inputEmail}
+                            onChange={(e) => setInputEmail(e.target.value)}
+                        />
+                        <TextField
+                            fullWidth
+                            margin="normal"
+                            label="Cohort Key (Optional)"
+                            variant="outlined"
+                            value={key}
+                            onChange={(e) => setKey(e.target.value)}
+                        />
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={loginLoading}
+                            style={{ margin: '16px 0' }}
+                        >
+                            {loginLoading ? <CircularProgress size={24} /> : 'Sign up'}
+                        </Button>
+                        {loginError && <Typography color="error">{loginError}</Typography>}
+                        {infoMsg && <Typography color="primary">{infoMsg}</Typography>}
+                    </form>
+                    <FormGroup>
+                        <FormControlLabel required control={<Checkbox />} label="By clicking here you agree to our Privacy Policy" />
+                    </FormGroup>
+                    <Stack alignItems="center" direction="row" gap={2}>
+                        <Info/>
+                        <Typography variant="body1">{privacyMessage}</Typography>
+                    </Stack>
+                </Paper>
         );
     };
 

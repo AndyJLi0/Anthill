@@ -27,7 +27,6 @@ const QuestionDetail = () => {
     const [resultMessage, setResultMessage] = useState('');
     const [previousAttempts, setPreviousAttempts] = useState([]);
     const navigate = useNavigate();
-    // const aardvark = 'aardvark.svg';
 
 
     // gets the previous attempts from firestore
