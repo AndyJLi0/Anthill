@@ -32,7 +32,7 @@ const QuestionDetail = () => {
 
     // gets the previous attempts from firestore
     const fetchPreviousAttempts = async () => {
-        const docRef = doc(db, 'users', email); 
+        const docRef = doc(db, 'users', email);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -256,7 +256,9 @@ const QuestionDetail = () => {
                                     <Typography variant="body1">{resultMessage.outputCode}</Typography>
                                     <Typography variant="h5">Test Results</Typography>
                                     <Typography variant="body1">{resultMessage.outputInfo}</Typography>
-                                    <Chip label={`Score: ${resultMessage.score} tests passed`} />
+                                    {resultMessage.score !== undefined && (
+                                        <Chip label={`Score: ${resultMessage.score} tests passed`} />
+                                    )}
                                 </Paper>
                             </Box>
 
