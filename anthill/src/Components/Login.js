@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-// import { auth, db } from '../../../shared/FirebaseConfig.js';
-// import { auth } from 'src/FirebaseConfig.js';
-// import { auth, db } from '../FirebaseConfig';
 import { auth, db } from '../FirebaseConfig';
-
-
 
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -69,7 +64,7 @@ const Login = () => {
                 handleCodeInApp: true,
             });
             localStorage.setItem('email', inputEmail);
-            setInfoMsg('We have sent you an email with a link to sign in');
+            setInfoMsg('We have sent you an email with a link to sign in. You may saftely close this window.');
         } catch (err) {
             setLoginError(err.message);
         } finally {

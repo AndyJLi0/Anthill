@@ -29,8 +29,10 @@ const QuestionDetail = () => {
     const navigate = useNavigate();
     // const aardvark = 'aardvark.svg';
 
+
+    // gets the previous attempts from firestore
     const fetchPreviousAttempts = async () => {
-        const docRef = doc(db, 'users', email); // Replace 'yourCollectionName' with your actual collection name
+        const docRef = doc(db, 'users', email); 
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -41,27 +43,21 @@ const QuestionDetail = () => {
         }
     };
 
-    useEffect(() => {
-        fetchPreviousAttempts();
+    // gets the snippet from the json file
+    const fetchSnippet = () => {
+        const key = `snippet${id}`;
 
-
-        const fetchSnippet = () => {
-            const key = `snippet${id}`;
-
-            if (snippets.hasOwnProperty(key)) {
-                const snippetData = snippets[key];
-                if (snippetData) {
-                    setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);
-                }
-            } else {
-                console.error(`Snippet with key ${key} not found.`);
+        if (snippets.hasOwnProperty(key)) {
+            const snippetData = snippets[key];
+            if (snippetData) {
+                setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);
             }
-        };
+        } else {
+            console.error(`Snippet with key ${key} not found.`);
+        }
+    };
 
-        fetchSnippet();
-    }, [id, language]); // Dependencies array
-
-
+    // toggles between javascript and python snippets
     const handleLanguageToggle = (lang) => {
         setLanguage(lang);
         const key = `snippet${id}`;
@@ -76,6 +72,7 @@ const QuestionDetail = () => {
     };
 
 
+    // submits the description and rationale to the backend
     const handleSubmit = async () => {
         try {
             const response = await axios.post(`http://localhost:3001/question/${id}`, {
@@ -85,14 +82,15 @@ const QuestionDetail = () => {
                 rationale: rationale
             });
             console.log('Response:', response.data);
-            setResultMessage(response.data); // Set the result message from the response
+            setResultMessage(response.data);
         } catch (error) {
             console.error('Error submitting description:', error);
             setResultMessage('Error submitting description. Please try again.');
         }
-        
+
     };
 
+    // toggles the question difficulty
     const handleToggle = (difficulty) => {
         switch (difficulty) {
             case 'Easy':
@@ -109,6 +107,7 @@ const QuestionDetail = () => {
         }
     };
 
+    // logs the user out
     const handleLogout = () => {
         auth.signOut().then(() => {
             navigate('/');
@@ -116,6 +115,22 @@ const QuestionDetail = () => {
             console.error(err);
         });
     };
+
+    // formats the timestamp
+    const formatTimestamp = (timestamp) => {
+        if (timestamp && timestamp.seconds) {
+            const date = new Date(timestamp.seconds * 1000);
+            return date.toLocaleString(); // Adjust this to your preferred format
+        }
+        return timestamp;
+    };
+
+
+    useEffect(() => {
+        fetchPreviousAttempts();
+        fetchSnippet();
+    }, [id, language]); // Dependencies array
+
 
     return (
         <Container>
@@ -253,10 +268,18 @@ const QuestionDetail = () => {
                                 .map((attempt, index) => (
                                     <Box key={index} mt={2}>
                                         <Paper elevation={1} style={{ padding: 16 }}>
-                                            <Typography variant="body2">{`Previous Attempt (${attempt.timestamp})`}</Typography>
-                                            <Typography variant="body2">{`Prompt: ${attempt.prompt}`}</Typography>
-                                            <Typography variant="body2">{`Generated Code:  ${attempt.functionCode}`}</Typography>
-                                            <Typography variant="body2">{`Rationale: ${attempt.rationale}`}</Typography>
+                                            <Typography variant="body2">
+                                                <strong>Previous Attempt:</strong> {formatTimestamp(attempt.timestamp)}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                <strong>Prompt:</strong> {attempt.prompt}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                <strong>Generated Code:</strong> {attempt.functionCode}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                <strong>Rationale:</strong> {attempt.rationale}
+                                            </Typography>
                                             <Chip label={`Score: ${attempt.result.passed} / ${attempt.result.total}`} />
                                         </Paper>
                                     </Box>
