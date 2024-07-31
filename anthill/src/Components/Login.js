@@ -150,7 +150,7 @@ const Login = () => {
                         {infoMsg && <Typography color="primary">{infoMsg}</Typography>}
                     </form>
                     <FormGroup>
-                        <FormControlLabel required control={<Checkbox />} label="By clicking here you agree to our Privacy Policy" />
+                        <FormControlLabel control={<Checkbox />} label="By clicking here you agree to our Privacy Policy" />
                     </FormGroup>
                     <Stack alignItems="center" direction="row" gap={2}>
                         <Info/>
