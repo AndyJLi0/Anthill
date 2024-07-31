@@ -25,22 +25,26 @@ const QuestionDetail = () => {
     const [openMedium, setOpenMedium] = useState(true);
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
+    const [previousAttempts, setPreviousAttempts] = useState([]);
     const navigate = useNavigate();
     // const aardvark = 'aardvark.svg';
 
-    const getUsers = async () => {
-        const docRef = doc(db, "users");
+    const fetchPreviousAttempts = async () => {
+        const docRef = doc(db, 'users', email); // Replace 'yourCollectionName' with your actual collection name
         const docSnap = await getDoc(docRef);
+
         if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
+            const data = docSnap.data();
+            setPreviousAttempts(data.logs || []);
         } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
+            console.log('No such document!');
         }
-    }
+    };
 
     useEffect(() => {
-        getUsers();
+        fetchPreviousAttempts();
+
+
         const fetchSnippet = () => {
             const key = `snippet${id}`;
 
@@ -58,20 +62,20 @@ const QuestionDetail = () => {
     }, [id, language]); // Dependencies array
 
 
-    const [previousAttempts] = useState([
-        {
-            id: 1,
-            timestamp: '12:30, 01/01/2023',
-            description: 'A function called foo that takes two integer arguments a and b and returns them added together.',
-            score: '4/5'
-        },
-        {
-            id: 2,
-            timestamp: '14:45, 02/01/2023',
-            description: 'A function called foo that takes two integer arguments a and b and returns the sum of a and b.',
-            score: '5/5'
-        }
-    ]);
+    // const [previousAttempts] = useState([
+    //     {
+    //         id: 1,
+    //         timestamp: '12:30, 01/01/2023',
+    //         description: 'A function called foo that takes two integer arguments a and b and returns them added together.',
+    //         score: '4/5'
+    //     },
+    //     {
+    //         id: 2,
+    //         timestamp: '14:45, 02/01/2023',
+    //         description: 'A function called foo that takes two integer arguments a and b and returns the sum of a and b.',
+    //         score: '5/5'
+    //     }
+    // ]);
 
     const handleLanguageToggle = (lang) => {
         setLanguage(lang);
@@ -125,9 +129,9 @@ const QuestionDetail = () => {
                 <Toolbar>
                     <Avatar alt="User Picture" src="/static/images/avatar/1.jpg" /> {/* Placeholder for user picture */}
                     <Button color="inherit" onClick={() => navigate(`/`)}>
-                    <Typography variant="h7" style={{ flexGrow: 1, marginLeft: 0 }}>
-                        Anthill {email}
-                    </Typography>
+                        <Typography variant="h7" style={{ flexGrow: 1, marginLeft: 0 }}>
+                            Anthill {email}
+                        </Typography>
                     </Button>
                     <Button color="inherit" onClick={handleLogout}>Logout</Button>
                 </Toolbar>
@@ -183,7 +187,7 @@ const QuestionDetail = () => {
                                         <ListItemText primary="Question 7" />
                                     </ListItem>
                                     <ListItem button onClick={() => navigate(`/question/8`)}>
-                                        <ListItemText primary="Question 8"/>
+                                        <ListItemText primary="Question 8" />
                                     </ListItem>
                                 </List>
                             </Collapse>
@@ -246,19 +250,23 @@ const QuestionDetail = () => {
                                     <Chip label={`Score: ${resultMessage.score} tests passed`} />
                                 </Paper>
                             </Box>
-                            
+
                         )}
                         <Box mt={4}>
                             <Typography variant="h6">Previous Attempts for {email}</Typography>
-                            {previousAttempts.map(attempt => (
-                                <Box key={attempt.id} mt={2}>
-                                    <Paper elevation={1} style={{ padding: 16 }}>
-                                        <Typography variant="body2">{`Previous Attempt (${attempt.timestamp})`}</Typography>
-                                        <Typography variant="body2">{attempt.description}</Typography>
-                                        <Chip label={`Score: ${attempt.score}`} />
-                                    </Paper>
-                                </Box>
-                            ))}
+                            {previousAttempts
+                                .filter(attempt => attempt.questionId === id)
+                                .map((attempt, index) => (
+                                    <Box key={index} mt={2}>
+                                        <Paper elevation={1} style={{ padding: 16 }}>
+                                            <Typography variant="body2">{`Previous Attempt (${attempt.timestamp})`}</Typography>
+                                            <Typography variant="body2">{`Prompt: ${attempt.prompt}`}</Typography>
+                                            <Typography variant="body2">{`Generated Code:  ${attempt.functionCode}`}</Typography>
+                                            <Typography variant="body2">{`Rationale: ${attempt.rationale}`}</Typography>
+                                            <Chip label={`Score: ${attempt.result.passed} / ${attempt.result.total}`} />
+                                        </Paper>
+                                    </Box>
+                                ))}
                         </Box>
                     </Paper>
                 </Grid>
