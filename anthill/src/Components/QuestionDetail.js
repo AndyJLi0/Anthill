@@ -9,7 +9,7 @@ import { useEmail } from './EmailContext';
 import axios from 'axios';
 import snippets from '../snippets.json'
 
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection } from "firebase/firestore";
 import { db, auth } from '../FirebaseConfig';
 
 
@@ -62,24 +62,17 @@ const QuestionDetail = () => {
     }, [id, language]); // Dependencies array
 
 
-    // const [previousAttempts] = useState([
-    //     {
-    //         id: 1,
-    //         timestamp: '12:30, 01/01/2023',
-    //         description: 'A function called foo that takes two integer arguments a and b and returns them added together.',
-    //         score: '4/5'
-    //     },
-    //     {
-    //         id: 2,
-    //         timestamp: '14:45, 02/01/2023',
-    //         description: 'A function called foo that takes two integer arguments a and b and returns the sum of a and b.',
-    //         score: '5/5'
-    //     }
-    // ]);
-
     const handleLanguageToggle = (lang) => {
         setLanguage(lang);
-        setSnippet(language === 'JavaScript' ? snippets[`snippets${id}`].javascript : snippets[`snippets${id}`].python);
+        const key = `snippet${id}`;
+        if (snippets.hasOwnProperty(key)) {
+            const snippetData = snippets[key];
+            if (snippetData) {
+                setSnippet(language === 'JavaScript' ? snippetData.javascript : snippetData.python);    // copied here from above, silences warning
+            }
+        } else {
+            console.error(`Snippet with key ${key} not found.`);
+        }
     };
 
 
@@ -97,6 +90,7 @@ const QuestionDetail = () => {
             console.error('Error submitting description:', error);
             setResultMessage('Error submitting description. Please try again.');
         }
+        
     };
 
     const handleToggle = (difficulty) => {
