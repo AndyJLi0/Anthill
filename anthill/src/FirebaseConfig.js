@@ -21,19 +21,3 @@ export const auth = getAuth(app);
 console.log("before db init");
 // Initialize Firestore
 export const db = getFirestore(app);
-
-async function initializeData() {
-    try {
-        await addDoc(collection(db, 'testCollection'), {
-            someField: 'someValue'
-        });
-        console.log('Document successfully written');
-    }
-    catch (e) {
-        console.error('Error adding document: ', e);
-    }
-}
-
-initializeData();
-// console.log("here's what db looks like!", db);
-// export { auth, db };

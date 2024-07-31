@@ -47,22 +47,10 @@ app.use(express.json());
 app.use(cors());
 
 // Testing out db by attempting to write to it same as FirebaseConfig.js
-async function initializeData() {
-    try {
-        await addDoc(collection(db, 'testCollection'), {
-            someField: 'someValue FROM INDEX'
-        });
-        console.log('Document successfully written');
-    } catch (e) {
-        console.error('Error adding document: ', e);
-    }
-}
 
 function toInt(char) {
     return parseInt(char, 10);
 }
-
-initializeData();
 
 export async function databaseLog(email, prompt, questionId, functionCode, result, rationale) {
     console.log("attempting to log:");
