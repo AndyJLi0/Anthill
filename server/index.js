@@ -60,7 +60,7 @@ async function initializeData() {
   
 initializeData();
 
-async function databaseLog(email, prompt, questionId, functionCode, result) {
+export async function databaseLog(email, prompt, questionId, functionCode, result) {
     console.log("attempting to log:");
     console.log("email: ", email);
     console.log("prompt: ", prompt);
@@ -217,7 +217,7 @@ export function runTestCases(func, cases) {
     for (const testCase of cases) {
         const result = func(...testCase.input);
         let outcome = "Fail";
-        console.log(`Running test case: input=${testCase.input}, expected=${testCase.expected}, got=${result}`);
+        // console.log(`Running test case: input=${testCase.input}, expected=${testCase.expected}, got=${result}`);
         if (typeof(result) !== 'object' && result === testCase.expected) {
             passed += 1;
             outcome = "Pass";

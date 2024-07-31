@@ -1,6 +1,26 @@
-import ollama from 'ollama'
 import { expect } from 'chai';
-import { testCases, runTestCases, pullModel } from '../index.js';
+import { testCases, runTestCases, databaseLog } from '../index.js';
+import { doc, getFirestore, getDoc, deleteDoc } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDmxHi0ePlXnK-R9mshM_f6f6uL_9ZB0Lw",
+  authDomain: "anthill-976f5.firebaseapp.com",
+  projectId: "anthill-976f5",
+  storageBucket: "anthill-976f5.appspot.com",
+  messagingSenderId: "404854557178",
+  appId: "1:404854557178:web:ba19d53bbac68de0773c43",
+  measurementId: "G-HX6JM48RCP"
+};
+// Initialize Firebase
+const app_firebase = initializeApp(firebaseConfig);
+
+const auth = getAuth(app_firebase);
+
+console.log("before db init");
+// Initialize Firestore
+const db = getFirestore(app_firebase);
 
 
 // the tests for testCases can be seen more verbosely described in
@@ -287,7 +307,13 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[1]);
-    expect(result.passed).to.equal(result.total - 3);
+    
+    
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 3);
   });
 
   it('snippet 2 incorrectly', () => {
@@ -300,7 +326,11 @@ describe('runTestCases tests incorrect functions', () => {
     } 
 
     let result = runTestCases(foo, testCases[2]);
-    expect(result.passed).to.equal(result.total - 6);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 6);
   });
 
   it('snippet 3 incorrectly', () => {
@@ -313,7 +343,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[3]);
-    expect(result.passed).to.equal(result.total - 2);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 2);
   });
 
   it('snippet 4 incorrectly', () => {
@@ -326,7 +360,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[4]);
-    expect(result.passed).to.equal(result.total - 2);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 2);
   });
 
   it('snippet 5 incorrectly', () => {
@@ -339,7 +377,11 @@ describe('runTestCases tests incorrect functions', () => {
     } 
 
     const result = runTestCases(foo, testCases[5]);
-    expect(result.passed).to.equal(result.total - 3);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 3);
   });
 
   it('snippet 6 incorrectly', () => {
@@ -354,7 +396,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[6]);
-    expect(result.passed).to.equal(result.total);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total);
   });
 
   it('snippet 7 incorrectly', () => {
@@ -374,7 +420,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[7]);
-    expect(result.passed).to.equal(result.total - 4);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 4);
   });
 
   it('snippet 8 incorrectly', () => {
@@ -396,7 +446,63 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[8]);
-    expect(result.passed).to.equal(result.total - 5);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 5);
+  });
+});
+
+describe('Logging function test', () => {
+  const email = "test_email";
+    const prompt = "test_prompt";
+    const questionId = 20;
+    const functionCode = "test_functionCode";
+    const result = { passed: "test", total: "3/4" };
+
+    beforeEach(async () => {
+        // Clean up the test document before each test
+        await deleteDoc(doc(db, 'users', email));
+    });
+
+    it('should log for a new user', async () => {
+        await databaseLog(email, prompt, questionId, functionCode, result);
+
+        const userDocRef = doc(db, 'users', email);
+        const userDocSnap = await getDoc(userDocRef);
+        expect(userDocSnap.exists()).to.be.true;
+
+        const data = userDocSnap.data();
+        expect(data.logs).to.be.an('array').that.has.lengthOf(1);
+        expect(data.logs[0].prompt).to.equal(prompt);
+        expect(data.logs[0].questionId).to.equal(questionId);
+        expect(data.logs[0].functionCode).to.equal(functionCode);
+        expect(data.logs[0].result.passed).to.equal(result.passed);
+        expect(data.logs[0].result.total).to.equal(result.total);
+    });
+
+    it('should log for an existing user', async () => {
+      await databaseLog(email, prompt, questionId, functionCode, result);
+
+      // Log again with new details
+      const newPrompt = "new_test_prompt";
+      const newQuestionId = 21;
+      const newFunctionCode = "new_test_functionCode";
+      const newResult = { passed: "new_test", total: "4/4" };
+      await databaseLog(email, newPrompt, newQuestionId, newFunctionCode, newResult);
+
+      const userDocRef = doc(db, 'users', email);
+      const userDocSnap = await getDoc(userDocRef);
+      expect(userDocSnap.exists()).to.be.true;
+
+      const data = userDocSnap.data();
+      expect(data.logs).to.be.an('array').that.has.lengthOf(2);
+      expect(data.logs[1].prompt).to.equal(newPrompt);
+      expect(data.logs[1].questionId).to.equal(newQuestionId);
+      expect(data.logs[1].functionCode).to.equal(newFunctionCode);
+      expect(data.logs[1].result.passed).to.equal(newResult.passed);
+      expect(data.logs[1].result.total).to.equal(newResult.total);
   });
 });
 
