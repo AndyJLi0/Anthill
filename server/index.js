@@ -64,7 +64,7 @@ function toInt(char) {
 
 initializeData();
 
-export async function databaseLog(email, prompt, questionId, functionCode, result) {
+export async function databaseLog(email, prompt, questionId, functionCode, result, rationale) {
     console.log("attempting to log:");
     console.log("email: ", email);
     console.log("prompt: ", prompt);

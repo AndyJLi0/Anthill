@@ -459,55 +459,55 @@ describe('Logging function test', () => {
     const prompt = "test_prompt";
     const questionId = 20;
     const functionCode = "test_functionCode";
-    const result = { passed: "test", total: "3/4" };
+    const result = [ "test",  "3/4" ];
+    const rationale = "test_rationale";
 
     beforeEach(async () => {
-        // Clean up the test document before each test
-        await deleteDoc(doc(db, 'users', email));
-    });
+      // Clean up the test document before each test
+      await deleteDoc(doc(db, 'users', email));
+  });
 
-    it('should log for a new user', async () => {
-        await databaseLog(email, prompt, questionId, functionCode, result);
-
-        const userDocRef = doc(db, 'users', email);
-        const userDocSnap = await getDoc(userDocRef);
-        expect(userDocSnap.exists()).to.be.true;
-
-        const data = userDocSnap.data();
-        expect(data.logs).to.be.an('array').that.has.lengthOf(1);
-        expect(data.logs[0].prompt).to.equal(prompt);
-        expect(data.logs[0].questionId).to.equal(questionId);
-        expect(data.logs[0].functionCode).to.equal(functionCode);
-        expect(data.logs[0].result.passed).to.equal(result.passed);
-        expect(data.logs[0].result.total).to.equal(result.total);
-    });
-
-    it('should log for an existing user', async () => {
-      await databaseLog(email, prompt, questionId, functionCode, result);
-
-      // Log again with new details
-      const newPrompt = "new_test_prompt";
-      const newQuestionId = 21;
-      const newFunctionCode = "new_test_functionCode";
-      const newResult = { passed: "new_test", total: "4/4" };
-      await databaseLog(email, newPrompt, newQuestionId, newFunctionCode, newResult);
+  it('should log for a new user', async () => {
+      await databaseLog(email, prompt, questionId, functionCode, result, rationale);
 
       const userDocRef = doc(db, 'users', email);
       const userDocSnap = await getDoc(userDocRef);
       expect(userDocSnap.exists()).to.be.true;
 
       const data = userDocSnap.data();
-      expect(data.logs).to.be.an('array').that.has.lengthOf(2);
-      expect(data.logs[1].prompt).to.equal(newPrompt);
-      expect(data.logs[1].questionId).to.equal(newQuestionId);
-      expect(data.logs[1].functionCode).to.equal(newFunctionCode);
-      expect(data.logs[1].result.passed).to.equal(newResult.passed);
-      expect(data.logs[1].result.total).to.equal(newResult.total);
+      const logEntry = data.logs[0];
+      expect(logEntry.prompt).to.equal(prompt);
+      expect(logEntry.questionId).to.equal(questionId);
+      expect(logEntry.functionCode).to.equal(functionCode);
+      expect(logEntry.result.passed).to.equal(parseInt(result[1][0]));
+      expect(logEntry.result.total).to.equal(parseInt(result[1][2]));
+      expect(logEntry.rationale).to.equal(rationale);
   });
-});
 
-// const response = await ollama.chat({
-//   model: 'llama2',
-//   messages: [{ role: 'user', content: 'Why is the sky blue?' }],
-// })
-// console.log(response.message.content)
+  it('should log for an existing user', async () => {
+      // Create an initial log entry
+      await databaseLog(email, prompt, questionId, functionCode, result, rationale);
+
+      // Log again with new details
+      const newPrompt = "new_test_prompt";
+      const newQuestionId = 21;
+      const newFunctionCode = "new_test_functionCode";
+      const newResult = ["new_test", "4/4"];
+      const newRationale = "new_test_rationale";
+      await databaseLog(email, newPrompt, newQuestionId, newFunctionCode, newResult, newRationale);
+
+      const userDocRef = doc(db, 'users', email);
+      const userDocSnap = await getDoc(userDocRef);
+      expect(userDocSnap.exists()).to.be.true;
+
+      const data = userDocSnap.data();
+      const logEntry = data.logs[1];
+      expect(logEntry.prompt).to.equal(newPrompt);
+      expect(logEntry.questionId).to.equal(newQuestionId);
+      expect(logEntry.functionCode).to.equal(newFunctionCode);
+      expect(logEntry.result.passed).to.equal(parseInt(newResult[1][0]));
+      expect(logEntry.result.total).to.equal(parseInt(newResult[1][2]));
+      expect(logEntry.rationale).to.equal(newRationale);
+  });
+
+});
