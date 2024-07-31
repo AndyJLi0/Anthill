@@ -24,20 +24,19 @@ Authors: Andy Li, Austin Zhu, Kira Potter, Ryan Wang
 
 ## Run tests
 
-1. **Navigate to server directory**:
+1. **Navigate to server directory or the anthill directory**:
 ```
 cd server
 ```
 
 2. **Make sure dependencies are available**
    ```
-   npm install mocha chai
-   npm install ollama
+   npm install
    ```
 3. **Run the tests**
    ```
    npx mocha test
    ```
-   (NOTE: one test fails if the server is already running, ignore this case unless the application is not running)
+   (NOTE: one test in server fails if the server is already running, ignore this case unless the server is not running)
 
 ## Note: Questions 5 and above are inconsistent due to the limitations of the LLM and given time restrictions.
