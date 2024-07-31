@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Grid, Paper, Box, Typography, TextField, Button, Divider, List, ListItem, ListItemText, Collapse, Chip, ListItemButton, AppBar, Toolbar, Avatar } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { useEmail } from './EmailContext';
-
+import userAvatar from './aardvark.png';
 
 import axios from 'axios';
 import snippets from '../snippets.json'
@@ -135,7 +135,7 @@ const QuestionDetail = () => {
         <Container>
             <AppBar position="static" color="default">
                 <Toolbar>
-                    <Avatar alt="User Picture" src="/static/images/avatar/1.jpg" /> {/* Placeholder for user picture */}
+                    <Avatar alt="User Picture" src={userAvatar} />
                     <Button color="inherit" onClick={() => navigate(`/`)}>
                         <Typography variant="h7" style={{ flexGrow: 1, marginLeft: 0 }}>
                             Anthill {email}
@@ -148,7 +148,6 @@ const QuestionDetail = () => {
                 <Grid item xs={2}>
                     <Paper elevation={3} style={{ padding: 16 }}>
                         <Typography variant="h6">Questions</Typography>
-                        {/* <Typography variant="body1">User Email: {email}, id {id}</Typography> */}
                         <Divider />
                         <List>
                             <ListItemButton onClick={() => handleToggle('Easy')} style={{ backgroundColor: '#d9f7be' }}>

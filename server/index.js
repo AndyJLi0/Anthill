@@ -1,23 +1,13 @@
 import express from 'express';
 import { Ollama } from 'ollama'
 import cors from 'cors';
-// import { db, auth } from '../shared/FirebaseConfig.js';
 import { doc, collection, getFirestore, addDoc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// const firebaseConfigPath = path.resolve('../shared/FirebaseConfig.js');
-// const { db } = await import(firebaseConfigPath);
-
-
 const app = express();
 const port = 3001;
-
 
 const firebaseConfig = {
     apiKey: "AIzaSyDmxHi0ePlXnK-R9mshM_f6f6uL_9ZB0Lw",
@@ -30,14 +20,12 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const app_firebase = initializeApp(firebaseConfig);
-
-const auth = getAuth(app_firebase);
-
-console.log("before db init");
 // Initialize Firestore
 const db = getFirestore(app_firebase);
 
-// const db = getFirestore(sharedApp);
+
+
+
 
 // thank you https://github.com/FlowiseAI/Flowise/issues/2241
 const ollama = new Ollama({ host: 'http://host.docker.internal:11434' })
@@ -47,7 +35,6 @@ app.use(express.json());
 app.use(cors());
 
 // Testing out db by attempting to write to it same as FirebaseConfig.js
-
 function toInt(char) {
     return parseInt(char, 10);
 }
@@ -64,14 +51,8 @@ export async function databaseLog(email, prompt, questionId, functionCode, resul
 
     try {
         // Create a reference to the user's document
-        // console.log("is db undefined? ", db);
-        // console.log("is db correct type?", db && typeof db === 'object' && db._delegate && db._delegate._firestoreClient);
-        // console.log("is db correct type?", db && typeof db === 'object');
-
 
         const userDocRef = doc(collection(db, 'users'), email);
-        // console.log("is userDocRef valid? ", userDocRef);
-
 
         // Get the user document
         const userDocSnap = await getDoc(userDocRef);
@@ -90,18 +71,6 @@ export async function databaseLog(email, prompt, questionId, functionCode, resul
             rationale: rationale,
             timestamp: new Date()
         };
-
-        //TEMP:
-        // const logEntry = {
-        //     prompt: prompt,
-        //     questionId: questionId,
-        //     functionCode: functionCode,
-        //     result: {
-        //     passed: 0,
-        //     total: 0,
-        //     },
-        //     timestamp: new Date()
-        // };
 
         console.log(logEntry);
 
@@ -248,7 +217,6 @@ app.post('/question/:questionId', async (req, res) => {
     const fullPrompt = `${prompt} Write this function in JavaScript. This will be directly passed into test cases, so I only want the string of code, in triple backticks, without any explanation or anything. It will be passed into the argument of a Function constructor. I also don't want any /n. Do not add any comments, and no notes or explainations, just the raw code. No prefixes or suffixes, just the code. All on one line`;
 
     try {
-        // console.log("here");
         // Pull the model if it's not already available
              await pullModel(modelName);
 
@@ -268,7 +236,6 @@ app.post('/question/:questionId', async (req, res) => {
             console.log('Extracted function code:', functionCode);
     
             // Create the function
-            //TODO:MAX SURE FUNCTION CODE IS SAFE AND NOT MALICIOUS - andy
             const userFunction = new Function('return ' + functionCode)();
             console.log('Generated function:', userFunction);
     
@@ -300,18 +267,6 @@ app.post('/question/:questionId', async (req, res) => {
 
         console.log(result);
 
-
-        //TEMP for testing
-        // const prompt = 'test_prompt';
-        // const questionId = 'test_questionId';
-        // const functionCode = 'test_functionCode';
-        // const test_email = "testEmail@notARealDomain.com";
-        // const result = "test_result";
-        // const responseMessage = "fake response";
-
-        // console.log("before log");
-        // Log result for email's account
-        //TODO: get actual email
         await databaseLog(email, prompt, questionId, functionCode, result, rationale);
         res.send(responseMessage);
     } catch (error) {

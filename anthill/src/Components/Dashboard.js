@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Typography, Box, LinearProgress, Avatar } from '@mui/material';
 import { auth, db } from '../FirebaseConfig';
 import { doc, getDoc } from 'firebase/firestore';
-
+import userAvatar from './aardvark.png';
 
 import { useEmail } from './EmailContext';
 
@@ -46,7 +46,7 @@ const Dashboard = ({ user }) => {
             console.error(err);
         });
     };
-    
+
     // Function to update question status based on user logs
     const fetchTestResults = async () => {
         try {
@@ -72,7 +72,6 @@ const Dashboard = ({ user }) => {
                             }
                         }
                     });
-
                     const score = highestScore ? `${highestScore.passed}/${highestScore.total}` : 'Incomplete';
                     return { ...question, score };
                 });
@@ -94,7 +93,7 @@ const Dashboard = ({ user }) => {
         <Container>
             <AppBar position="static" color="default">
                 <Toolbar>
-                    <Avatar alt="User Picture" src="/static/images/avatar/1.jpg" /> {/* Placeholder for user picture */}
+                    <Avatar alt="User Picture" src={userAvatar} />
                     <Typography variant="h6" style={{ flexGrow: 1, marginLeft: 16 }}>
                         Anthill {email}
                     </Typography>

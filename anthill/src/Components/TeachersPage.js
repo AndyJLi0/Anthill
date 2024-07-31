@@ -108,9 +108,9 @@ const TeachersPage = ({ user }) => {
         <Typography variant="h4" component="h1" gutterBottom>
           {user.email}'s Dashboard
         </Typography>
-        <Button 
-          variant="contained" 
-          color="secondary" 
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={handleLogout}
           sx={{ mb: 2 }}
         >
