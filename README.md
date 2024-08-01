@@ -22,6 +22,7 @@ Authors: Andy Li, Austin Zhu, Kira Potter, Ryan Wang
    ```
    start-app.bat
    ```
+   Note: we have no Windows devices, we're reasonably confident this works but have no way to test it.
 
 3. **Access the application**:
    Open your web browser and navigate to http://localhost:3000/ (NOTE: this may take some time (1-2 mins) to be available).
