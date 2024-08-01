@@ -255,8 +255,6 @@ app.post('/question/:questionId', async (req, res) => {
             return;
         }
 
-        // console.log("before running tests");
-
         // Run the test cases
         const result = runTestCases(userFunction, cases);
         const responseMessage = {
