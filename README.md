@@ -11,7 +11,7 @@ Authors: Andy Li, Austin Zhu, Kira Potter, Ryan Wang
 
 1. **Navigate to project directory**:
    ```
-   cd Project-Groups-09-Lab-B
+   cd Anthill
    ```
 
 2. **Start application (Docker Compose runs in this step)**:
