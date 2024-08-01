@@ -101,7 +101,7 @@ rationale:  test_rationale
   functionCode: 'test_functionCode',
   result: { passed: 3, total: 4 },
   rationale: 'test_rationale',
-  timestamp: 2024-08-01T04:30:51.003Z
+  timestamp: 2024-08-01T05:03:07.847Z
 }
 Log entry added to new document: {
   prompt: 'test_prompt',
@@ -109,7 +109,7 @@ Log entry added to new document: {
   functionCode: 'test_functionCode',
   result: { passed: 3, total: 4 },
   rationale: 'test_rationale',
-  timestamp: 2024-08-01T04:30:51.003Z
+  timestamp: 2024-08-01T05:03:07.847Z
 }
 log entry added: {
   prompt: 'test_prompt',
@@ -117,7 +117,7 @@ log entry added: {
   functionCode: 'test_functionCode',
   result: { passed: 3, total: 4 },
   rationale: 'test_rationale',
-  timestamp: 2024-08-01T04:30:51.003Z
+  timestamp: 2024-08-01T05:03:07.847Z
 }
 attempting to log:
 email:  test_email
@@ -132,7 +132,7 @@ rationale:  test_rationale
   functionCode: 'test_functionCode',
   result: { passed: 3, total: 4 },
   rationale: 'test_rationale',
-  timestamp: 2024-08-01T04:30:51.407Z
+  timestamp: 2024-08-01T05:03:08.249Z
 }
 Log entry added to new document: {
   prompt: 'test_prompt',
@@ -140,7 +140,7 @@ Log entry added to new document: {
   functionCode: 'test_functionCode',
   result: { passed: 3, total: 4 },
   rationale: 'test_rationale',
-  timestamp: 2024-08-01T04:30:51.407Z
+  timestamp: 2024-08-01T05:03:08.249Z
 }
 log entry added: {
   prompt: 'test_prompt',
@@ -148,7 +148,7 @@ log entry added: {
   functionCode: 'test_functionCode',
   result: { passed: 3, total: 4 },
   rationale: 'test_rationale',
-  timestamp: 2024-08-01T04:30:51.407Z
+  timestamp: 2024-08-01T05:03:08.249Z
 }
 attempting to log:
 email:  test_email
@@ -163,7 +163,7 @@ rationale:  new_test_rationale
   functionCode: 'new_test_functionCode',
   result: { passed: 4, total: 4 },
   rationale: 'new_test_rationale',
-  timestamp: 2024-08-01T04:30:51.612Z
+  timestamp: 2024-08-01T05:03:08.438Z
 }
 Log entry added to existing document: {
   prompt: 'new_test_prompt',
@@ -171,7 +171,7 @@ Log entry added to existing document: {
   functionCode: 'new_test_functionCode',
   result: { passed: 4, total: 4 },
   rationale: 'new_test_rationale',
-  timestamp: 2024-08-01T04:30:51.612Z
+  timestamp: 2024-08-01T05:03:08.438Z
 }
 log entry added: {
   prompt: 'new_test_prompt',
@@ -179,7 +179,7 @@ log entry added: {
   functionCode: 'new_test_functionCode',
   result: { passed: 4, total: 4 },
   rationale: 'new_test_rationale',
-  timestamp: 2024-08-01T04:30:51.612Z
+  timestamp: 2024-08-01T05:03:08.438Z
 }
 {
   "stats": {
@@ -188,16 +188,16 @@ log entry added: {
     "passes": 26,
     "pending": 0,
     "failures": 0,
-    "start": "2024-08-01T04:30:50.493Z",
-    "end": "2024-08-01T04:30:51.813Z",
-    "duration": 1320
+    "start": "2024-08-01T05:03:07.327Z",
+    "end": "2024-08-01T05:03:08.644Z",
+    "duration": 1317
   },
   "tests": [
     {
       "title": "testCases 1 against correct snippet 1",
       "fullTitle": "testCases function tested against correct snippets testCases 1 against correct snippet 1",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -233,7 +233,7 @@ log entry added: {
       "title": "testCases 5 against correct snippet 5",
       "fullTitle": "testCases function tested against correct snippets testCases 5 against correct snippet 5",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -242,7 +242,7 @@ log entry added: {
       "title": "testCases 6 against correct snippet 6",
       "fullTitle": "testCases function tested against correct snippets testCases 6 against correct snippet 6",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -251,7 +251,7 @@ log entry added: {
       "title": "testCases 7 against correct snippet 7",
       "fullTitle": "testCases function tested against correct snippets testCases 7 against correct snippet 7",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -269,7 +269,7 @@ log entry added: {
       "title": "snippet 1 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 1 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -278,7 +278,7 @@ log entry added: {
       "title": "snippet 2 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 2 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -287,7 +287,7 @@ log entry added: {
       "title": "snippet 3 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 3 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -332,7 +332,7 @@ log entry added: {
       "title": "snippet 8 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 8 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -395,7 +395,7 @@ log entry added: {
       "title": "snippet 7 incorrectly",
       "fullTitle": "runTestCases tests incorrect functions snippet 7 incorrectly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -413,7 +413,7 @@ log entry added: {
       "title": "should log for a new user",
       "fullTitle": "Logging function test should log for a new user",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 373,
+      "duration": 374,
       "currentRetry": 0,
       "speed": "slow",
       "err": {}
@@ -422,7 +422,7 @@ log entry added: {
       "title": "should log for an existing user",
       "fullTitle": "Logging function test should log for an existing user",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 492,
+      "duration": 488,
       "currentRetry": 0,
       "speed": "slow",
       "err": {}
@@ -435,7 +435,7 @@ log entry added: {
       "title": "testCases 1 against correct snippet 1",
       "fullTitle": "testCases function tested against correct snippets testCases 1 against correct snippet 1",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -471,7 +471,7 @@ log entry added: {
       "title": "testCases 5 against correct snippet 5",
       "fullTitle": "testCases function tested against correct snippets testCases 5 against correct snippet 5",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -480,7 +480,7 @@ log entry added: {
       "title": "testCases 6 against correct snippet 6",
       "fullTitle": "testCases function tested against correct snippets testCases 6 against correct snippet 6",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -489,7 +489,7 @@ log entry added: {
       "title": "testCases 7 against correct snippet 7",
       "fullTitle": "testCases function tested against correct snippets testCases 7 against correct snippet 7",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -507,7 +507,7 @@ log entry added: {
       "title": "snippet 1 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 1 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -516,7 +516,7 @@ log entry added: {
       "title": "snippet 2 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 2 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -525,7 +525,7 @@ log entry added: {
       "title": "snippet 3 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 3 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -570,7 +570,7 @@ log entry added: {
       "title": "snippet 8 correctly",
       "fullTitle": "runTestCases tests correct functions snippet 8 correctly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 0,
+      "duration": 1,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -633,7 +633,7 @@ log entry added: {
       "title": "snippet 7 incorrectly",
       "fullTitle": "runTestCases tests incorrect functions snippet 7 incorrectly",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 1,
+      "duration": 0,
       "currentRetry": 0,
       "speed": "fast",
       "err": {}
@@ -651,7 +651,7 @@ log entry added: {
       "title": "should log for a new user",
       "fullTitle": "Logging function test should log for a new user",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 373,
+      "duration": 374,
       "currentRetry": 0,
       "speed": "slow",
       "err": {}
@@ -660,7 +660,7 @@ log entry added: {
       "title": "should log for an existing user",
       "fullTitle": "Logging function test should log for an existing user",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
-      "duration": 492,
+      "duration": 488,
       "currentRetry": 0,
       "speed": "slow",
       "err": {}

@@ -6,16 +6,16 @@ before db init
     "passes": 2,
     "pending": 0,
     "failures": 0,
-    "start": "2024-08-01T04:30:49.099Z",
-    "end": "2024-08-01T04:30:49.795Z",
-    "duration": 696
+    "start": "2024-08-01T05:03:05.859Z",
+    "end": "2024-08-01T05:03:06.633Z",
+    "duration": 774
   },
   "tests": [
     {
       "title": "create and delete document with name testDocument and one entry",
       "fullTitle": "creating, destroying, and reading from a document create and delete document with name testDocument and one entry",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/anthill/test/logging-tests.test.mjs",
-      "duration": 694,
+      "duration": 772,
       "currentRetry": 0,
       "speed": "slow",
       "err": {}
@@ -37,7 +37,7 @@ before db init
       "title": "create and delete document with name testDocument and one entry",
       "fullTitle": "creating, destroying, and reading from a document create and delete document with name testDocument and one entry",
       "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/anthill/test/logging-tests.test.mjs",
-      "duration": 694,
+      "duration": 772,
       "currentRetry": 0,
       "speed": "slow",
       "err": {}
