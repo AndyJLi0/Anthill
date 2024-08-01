@@ -4,6 +4,9 @@ import cors from 'cors';
 import { doc, collection, getFirestore, addDoc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 
 const app = express();
@@ -270,6 +273,21 @@ app.post('/question/:questionId', async (req, res) => {
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send(`Error processing the request: ${error.message}`);
+    }
+});
+
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+app.get('/test-results-server', async (req, res) => {
+    console.log("here we are getchinggggg")
+    try {
+        const data = await fs.readFile('test-results.txt', 'utf8');
+        res.send(data);  // Send the raw text data
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error reading test results');
     }
 });
 

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 // import { testCases, runTestCases, pullModel } from '../../../server/index.js';
 
-import { db } from "./logging-tests.js";
+import { db } from "./logging-tests.mjs";
 import { doc, getDoc, setDoc, deleteDoc} from "firebase/firestore"
 
 

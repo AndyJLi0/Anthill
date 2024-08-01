@@ -1,0 +1,669 @@
+before db init
+Server is running at http://localhost:3001
+Running test case: input=0,0, expected=0, got=0
+Running test case: input=5,0, expected=5, got=5
+Running test case: input=0,9, expected=9, got=9
+Running test case: input=3,7, expected=10, got=10
+Running test case: input=0,0, expected=0, got=0
+Running test case: input=11,5, expected=11, got=11
+Running test case: input=2,9, expected=9, got=9
+Running test case: input=4,4, expected=4, got=4
+Running test case: input=-2,-20, expected=-2, got=-2
+Running test case: input=-37,-5, expected=-5, got=-5
+Running test case: input=-14,-14, expected=-14, got=-14
+Running test case: input=17,-98, expected=17, got=17
+Running test case: input=-3,11, expected=11, got=11
+Running test case: input=0,, expected=, got=
+Running test case: input=20,, expected=...................., got=....................
+Running test case: input=0,not an empty string, expected=not an empty string, got=not an empty string
+Running test case: input=13,add some periods, expected=add some periods............., got=add some periods.............
+Running test case: input=7,3, expected=false, got=false
+Running test case: input=1,18, expected=false, got=false
+Running test case: input=12,213, expected=false, got=false
+Running test case: input=200,16, expected=true, got=true
+Running test case: input=0, expected=0, got=0
+Running test case: input=1, expected=1, got=1
+Running test case: input=5, expected=15, got=15
+Running test case: input=29, expected=435, got=435
+Running test case: input=4, expected=2, got=2
+Running test case: input=105, expected=3, got=3
+Running test case: input=709979, expected=61, got=61
+Running test case: input=0, expected=0, got=0
+Running test case: input=1, expected=0, got=0
+Running test case: input=2, expected=0, got=0
+Running test case: input=7, expected=0, got=0
+Running test case: input=43133, expected=0, got=0
+Running test case: input=0,290, expected=1, got=1
+Running test case: input=1,5, expected=1, got=1
+Running test case: input=10,2001, expected=3628800, got=3628800
+Running test case: input=1,0, expected=1, got=1
+Running test case: input=2,1, expected=1, got=1
+Running test case: input=9,8, expected=40320, got=40320
+Running test case: input=0, expected=, got=
+Running test case: input=1, expected=, got=
+Running test case: input=10, expected=2,3,5,7, got=2,3,5,7
+Running test case: input=11, expected=2,3,5,7, got=2,3,5,7
+Running test case: input=12, expected=2,3,5,7,11, got=2,3,5,7,11
+Running test case: input=0,0, expected=0, got=0
+Running test case: input=5,0, expected=5, got=0
+Running test case: input=0,9, expected=9, got=0
+Running test case: input=3,7, expected=10, got=21
+Running test case: input=0,0, expected=0, got=0
+Running test case: input=11,5, expected=11, got=5
+Running test case: input=2,9, expected=9, got=2
+Running test case: input=4,4, expected=4, got=4
+Running test case: input=-2,-20, expected=-2, got=-20
+Running test case: input=-37,-5, expected=-5, got=-37
+Running test case: input=-14,-14, expected=-14, got=-14
+Running test case: input=17,-98, expected=17, got=-98
+Running test case: input=-3,11, expected=11, got=-3
+Running test case: input=0,, expected=, got=
+Running test case: input=20,, expected=...................., got=.................
+Running test case: input=0,not an empty string, expected=not an empty string, got=not an empty string
+Running test case: input=13,add some periods, expected=add some periods............., got=add some periods..........
+Running test case: input=7,3, expected=false, got=false
+Running test case: input=1,18, expected=false, got=false
+Running test case: input=12,213, expected=false, got=true
+Running test case: input=200,16, expected=true, got=false
+Running test case: input=0, expected=0, got=0
+Running test case: input=1, expected=1, got=0
+Running test case: input=5, expected=15, got=0
+Running test case: input=29, expected=435, got=0
+Running test case: input=4, expected=2, got=2
+Running test case: input=105, expected=3, got=3
+Running test case: input=709979, expected=61, got=61
+Running test case: input=0, expected=0, got=0
+Running test case: input=1, expected=0, got=0
+Running test case: input=2, expected=0, got=0
+Running test case: input=7, expected=0, got=0
+Running test case: input=43133, expected=0, got=0
+Running test case: input=0,290, expected=1, got=1
+Running test case: input=1,5, expected=1, got=0
+Running test case: input=10,2001, expected=3628800, got=-54
+Running test case: input=1,0, expected=1, got=1
+Running test case: input=2,1, expected=1, got=0
+Running test case: input=9,8, expected=40320, got=-35
+Running test case: input=0, expected=, got=2
+Running test case: input=1, expected=, got=2
+Running test case: input=10, expected=2,3,5,7, got=2
+Running test case: input=11, expected=2,3,5,7, got=2
+Running test case: input=12, expected=2,3,5,7,11, got=2
+attempting to log:
+email:  test_email
+prompt:  test_prompt
+questionId:  20
+functionCode:  test_functionCode
+result:  [ 'test', '3/4' ]
+rationale:  test_rationale
+{
+  prompt: 'test_prompt',
+  questionId: 20,
+  functionCode: 'test_functionCode',
+  result: { passed: 3, total: 4 },
+  rationale: 'test_rationale',
+  timestamp: 2024-08-01T04:30:51.003Z
+}
+Log entry added to new document: {
+  prompt: 'test_prompt',
+  questionId: 20,
+  functionCode: 'test_functionCode',
+  result: { passed: 3, total: 4 },
+  rationale: 'test_rationale',
+  timestamp: 2024-08-01T04:30:51.003Z
+}
+log entry added: {
+  prompt: 'test_prompt',
+  questionId: 20,
+  functionCode: 'test_functionCode',
+  result: { passed: 3, total: 4 },
+  rationale: 'test_rationale',
+  timestamp: 2024-08-01T04:30:51.003Z
+}
+attempting to log:
+email:  test_email
+prompt:  test_prompt
+questionId:  20
+functionCode:  test_functionCode
+result:  [ 'test', '3/4' ]
+rationale:  test_rationale
+{
+  prompt: 'test_prompt',
+  questionId: 20,
+  functionCode: 'test_functionCode',
+  result: { passed: 3, total: 4 },
+  rationale: 'test_rationale',
+  timestamp: 2024-08-01T04:30:51.407Z
+}
+Log entry added to new document: {
+  prompt: 'test_prompt',
+  questionId: 20,
+  functionCode: 'test_functionCode',
+  result: { passed: 3, total: 4 },
+  rationale: 'test_rationale',
+  timestamp: 2024-08-01T04:30:51.407Z
+}
+log entry added: {
+  prompt: 'test_prompt',
+  questionId: 20,
+  functionCode: 'test_functionCode',
+  result: { passed: 3, total: 4 },
+  rationale: 'test_rationale',
+  timestamp: 2024-08-01T04:30:51.407Z
+}
+attempting to log:
+email:  test_email
+prompt:  new_test_prompt
+questionId:  21
+functionCode:  new_test_functionCode
+result:  [ 'new_test', '4/4' ]
+rationale:  new_test_rationale
+{
+  prompt: 'new_test_prompt',
+  questionId: 21,
+  functionCode: 'new_test_functionCode',
+  result: { passed: 4, total: 4 },
+  rationale: 'new_test_rationale',
+  timestamp: 2024-08-01T04:30:51.612Z
+}
+Log entry added to existing document: {
+  prompt: 'new_test_prompt',
+  questionId: 21,
+  functionCode: 'new_test_functionCode',
+  result: { passed: 4, total: 4 },
+  rationale: 'new_test_rationale',
+  timestamp: 2024-08-01T04:30:51.612Z
+}
+log entry added: {
+  prompt: 'new_test_prompt',
+  questionId: 21,
+  functionCode: 'new_test_functionCode',
+  result: { passed: 4, total: 4 },
+  rationale: 'new_test_rationale',
+  timestamp: 2024-08-01T04:30:51.612Z
+}
+{
+  "stats": {
+    "suites": 4,
+    "tests": 26,
+    "passes": 26,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-08-01T04:30:50.493Z",
+    "end": "2024-08-01T04:30:51.813Z",
+    "duration": 1320
+  },
+  "tests": [
+    {
+      "title": "testCases 1 against correct snippet 1",
+      "fullTitle": "testCases function tested against correct snippets testCases 1 against correct snippet 1",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 2 against correct snippet 2",
+      "fullTitle": "testCases function tested against correct snippets testCases 2 against correct snippet 2",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 3 against correct snippet 3",
+      "fullTitle": "testCases function tested against correct snippets testCases 3 against correct snippet 3",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 4 against correct snippet 4",
+      "fullTitle": "testCases function tested against correct snippets testCases 4 against correct snippet 4",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 5 against correct snippet 5",
+      "fullTitle": "testCases function tested against correct snippets testCases 5 against correct snippet 5",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 6 against correct snippet 6",
+      "fullTitle": "testCases function tested against correct snippets testCases 6 against correct snippet 6",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 7 against correct snippet 7",
+      "fullTitle": "testCases function tested against correct snippets testCases 7 against correct snippet 7",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 8 against correct snippet 8",
+      "fullTitle": "testCases function tested against correct snippets testCases 8 against correct snippet 8",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 1 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 1 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 2 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 2 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 3 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 3 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 4 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 4 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 5 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 5 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 6 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 6 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 7 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 7 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 8 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 8 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 1 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 1 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 2 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 2 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 3 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 3 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 4 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 4 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 5 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 5 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 6 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 6 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 7 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 7 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 8 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 8 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should log for a new user",
+      "fullTitle": "Logging function test should log for a new user",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 373,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should log for an existing user",
+      "fullTitle": "Logging function test should log for an existing user",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 492,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    }
+  ],
+  "pending": [],
+  "failures": [],
+  "passes": [
+    {
+      "title": "testCases 1 against correct snippet 1",
+      "fullTitle": "testCases function tested against correct snippets testCases 1 against correct snippet 1",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 2 against correct snippet 2",
+      "fullTitle": "testCases function tested against correct snippets testCases 2 against correct snippet 2",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 3 against correct snippet 3",
+      "fullTitle": "testCases function tested against correct snippets testCases 3 against correct snippet 3",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 4 against correct snippet 4",
+      "fullTitle": "testCases function tested against correct snippets testCases 4 against correct snippet 4",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 5 against correct snippet 5",
+      "fullTitle": "testCases function tested against correct snippets testCases 5 against correct snippet 5",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 6 against correct snippet 6",
+      "fullTitle": "testCases function tested against correct snippets testCases 6 against correct snippet 6",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 7 against correct snippet 7",
+      "fullTitle": "testCases function tested against correct snippets testCases 7 against correct snippet 7",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "testCases 8 against correct snippet 8",
+      "fullTitle": "testCases function tested against correct snippets testCases 8 against correct snippet 8",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 1 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 1 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 2 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 2 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 3 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 3 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 4 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 4 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 5 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 5 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 6 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 6 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 7 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 7 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 8 correctly",
+      "fullTitle": "runTestCases tests correct functions snippet 8 correctly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 1 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 1 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 2 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 2 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 3 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 3 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 4 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 4 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 5 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 5 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 6 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 6 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 7 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 7 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 1,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "snippet 8 incorrectly",
+      "fullTitle": "runTestCases tests incorrect functions snippet 8 incorrectly",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 0,
+      "currentRetry": 0,
+      "speed": "fast",
+      "err": {}
+    },
+    {
+      "title": "should log for a new user",
+      "fullTitle": "Logging function test should log for a new user",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 373,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    },
+    {
+      "title": "should log for an existing user",
+      "fullTitle": "Logging function test should log for an existing user",
+      "file": "/Users/AustinZhu/CPSC 310/Sprint 2 - Final Tests/Project-Groups-09-Lab-B/server/test/server-tests.test.js",
+      "duration": 492,
+      "currentRetry": 0,
+      "speed": "slow",
+      "err": {}
+    }
+  ]
+}

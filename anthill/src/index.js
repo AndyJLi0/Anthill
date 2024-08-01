@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import { EmailProvider } from './Components/EmailContext';
+import App from './App.js';
+import { EmailProvider } from './Components/EmailContext.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -4,6 +4,12 @@ import { doc, getFirestore, getDoc, deleteDoc } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
+// const { expect } = require('chai');
+// const { testCases, runTestCases, databaseLog } = require('../index.js');
+// const { doc, getFirestore, getDoc, deleteDoc } = require('firebase/firestore');
+// const { initializeApp } = require('firebase/app');
+// const { getAuth } = require('firebase/auth');
+
 const firebaseConfig = {
   apiKey: "AIzaSyDmxHi0ePlXnK-R9mshM_f6f6uL_9ZB0Lw",
   authDomain: "anthill-976f5.firebaseapp.com",

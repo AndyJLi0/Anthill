@@ -14,9 +14,9 @@ Authors: Andy Li, Austin Zhu, Kira Potter, Ryan Wang
    cd Project-Groups-09-Lab-B
    ```
 
-2. **Compose docker images**:
+2. **Start application (Docker Compose runs in this step)**:
    ```
-   docker compose up -d
+   ./start-app.sh
    ```
 
 3. **Access the application**:
@@ -24,19 +24,12 @@ Authors: Andy Li, Austin Zhu, Kira Potter, Ryan Wang
 
 ## Run tests
 
-1. **Navigate to server directory or the anthill directory**:
+1. **Start app normally**:
 ```
-cd server
+./start-app.sh
 ```
+2. **Navigate to two test pages: http://localhost:3000/test-results-anthill and http://localhost:3000/test-results-server**
+Note on tests: the results are all printed. For most pertinent information, look for the "pending", "failures", and "passes" fields.
 
-2. **Make sure dependencies are available**
-   ```
-   npm install
-   ```
-3. **Run the tests**
-   ```
-   npx mocha test
-   ```
-   (NOTE: one test in server fails if the server is already running, ignore this case unless the server is not running)
 
-## Note: Questions 5 and above are inconsistent due to the limitations of the LLM and given time restrictions.
+## Note: Questions 5 and above are inconsistent due to the limitations of the LLM and imposing time restrictions.
