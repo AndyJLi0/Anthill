@@ -1,4 +1,3 @@
 /ollama/ollama
 ollama
-/anthill/public/test-results.txt
-/server/test-results.txt
+**/test-results.txt
