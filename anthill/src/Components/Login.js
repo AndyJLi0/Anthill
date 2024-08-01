@@ -1,50 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../FirebaseConfig';
+import { auth, db } from '../FirebaseConfig';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { isSignInWithEmailLink, sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
-import { Container, TextField, Button, Typography, CircularProgress, Paper, Grid } from '@mui/material';
+import { Container, TextField, Button, Typography, CircularProgress, Paper, Grid, Checkbox, FormGroup, FormControlLabel, Tooltip, IconButton, Divider, Stack } from '@mui/material';
+import { Info } from '@mui/icons-material';
 import { useEmail } from './EmailContext';
 
 const Login = () => {
     const [user] = useAuthState(auth);
     const { email, setEmail } = useEmail();
-
     const navigate = useNavigate();
     const location = useLocation();
     const { search } = location;
 
     const [inputEmail, setInputEmail] = useState('');
+    const [isTeacher, setIsTeacher] = useState(false);
+    const [key, setKey] = useState('');
     const [loginLoading, setLoginLoading] = useState(false);
     const [loginError, setLoginError] = useState('');
     const [infoMsg, setInfoMsg] = useState('');
     const [initialLoading, setInitialLoading] = useState(false);
     const [initialError, setInitialError] = useState('');
+    const privacyMessage = 'We will collect and store your email and a cohort key to make an account specific to you. This will allow you to keep track of your progress as you work through the problem set. If you do not wish for us to store your email we will not be able to create an account for you and the app will not work as intended.';
 
-    useEffect(() => {
-        if (user) {
-            navigate('/');
-            return;
-        }
-
+    const handleSignInWithEmailLink = async () => {
         if (isSignInWithEmailLink(auth, window.location.href)) {
             let email = localStorage.getItem('email') || window.prompt('Please provide your email');
             if (!email) return;
 
             setInitialLoading(true);
-            signInWithEmailLink(auth, email, window.location.href)
-                .then(result => {
-                    localStorage.removeItem('email');
-                    setEmail(email); // SET EMAIL HERE
-                    navigate('/');
-                })
-                .catch(err => {
-                    setInitialError(err.message);
-                    navigate('/login');
-                })
-                .finally(() => setInitialLoading(false));
+            try {
+                const result = await signInWithEmailLink(auth, email, window.location.href);
+                localStorage.removeItem('email');
+                setEmail(email);
+                createUserDocument(email);
+                navigate('/');
+            } catch (err) {
+                setInitialError(err.message);
+                navigate('/login');
+            } finally {
+                setInitialLoading(false);
+            }
         }
-    }, [user, navigate, search, setEmail]);
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -55,7 +55,9 @@ const Login = () => {
                 handleCodeInApp: true,
             });
             localStorage.setItem('email', inputEmail);
-            setInfoMsg('We have sent you an email with a link to sign in');
+            localStorage.setItem('isTeacher', isTeacher);
+            localStorage.setItem('key', key);
+            setInfoMsg('We have sent you an email with a link to sign in. You may safely close this window.');
         } catch (err) {
             setLoginError(err.message);
         } finally {
@@ -75,11 +77,31 @@ const Login = () => {
                     <TextField
                         fullWidth
                         margin="normal"
-                        label="Email"
+                        label="email@domain.com"
                         type="email"
                         variant="outlined"
                         value={inputEmail}
                         onChange={(e) => setInputEmail(e.target.value)}
+                    />
+                    <TextField
+                        fullWidth
+                        margin="normal"
+                        label="Teacher's Email"
+                        type="text"
+                        variant="outlined"
+                        value={key}
+                        onChange={(e) => setKey(e.target.value)}
+                        disabled={isTeacher}
+                    />
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={isTeacher}
+                                onChange={(e) => setIsTeacher(e.target.checked)}
+                                name="isTeacher"
+                            />
+                        }
+                        label="Are you a Teacher?"
                     />
                     <Button
                         fullWidth
@@ -94,9 +116,43 @@ const Login = () => {
                     {loginError && <Typography color="error">{loginError}</Typography>}
                     {infoMsg && <Typography color="primary">{infoMsg}</Typography>}
                 </form>
+                <FormGroup>
+                    <FormControlLabel control={<Checkbox />} label="By clicking here you agree to our Privacy Policy" />
+                </FormGroup>
+                <Stack alignItems="center" direction="row" gap={2}>
+                    <Info/>
+                    <Typography variant="body1">{privacyMessage}</Typography>
+                </Stack>
             </Paper>
         );
     };
+
+    const createUserDocument = async (email) => {
+        try {
+            const userDocRef = doc(db, 'users', email);
+            const userDoc = await getDoc(userDocRef);
+
+            if (!userDoc.exists()) {
+                const isTeacher = localStorage.getItem('isTeacher') === 'true';
+                const key = localStorage.getItem('key') || '0';
+                await setDoc(userDocRef, {
+                    key: key,
+                    isTeacher: isTeacher
+                });
+                console.log('User document created');
+                localStorage.removeItem('isTeacher');
+                localStorage.removeItem('key');
+            } else {
+                console.log('User document already exists.');
+            }
+        } catch (e) {
+            console.error('Error creating user document: ', e);
+        }
+    };
+
+    useEffect(() => {
+        handleSignInWithEmailLink();
+    }, [user, navigate, search, setEmail]);
 
     return (
         <Container>

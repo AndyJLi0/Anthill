@@ -1,9 +1,7 @@
 # credit to datawookie for ollama model pull
 # StackOverflow: https://stackoverflow.com/questions/78500319/how-to-pull-model-automatically-with-container-creation
-
 services:
   app:
-    image: anthill
     build:
       context: ./anthill
     ports:
@@ -12,9 +10,14 @@ services:
       - ./anthill:/app
       - /app/node_modules
     command: npm start
+    stdin_open: true
+    tty: true
+    environment:
+      - NODE_OPTIONS=--openssl-legacy-provider
+    networks:
+      - default_network
 
   server:
-    image: server
     build:
       context: ./server
     ports:
@@ -23,16 +26,24 @@ services:
       - ./server:/server
       - /server/node_modules
     command: npm start
+    networks:
+      - default_network
 
   ollama:
     image: ollama/ollama:latest
     ports:
-        - 11434:11434
+      - 11434:11434
     volumes:
-        - ./ollama/ollama:/root/.ollama
-        - ./anthill/entrypoint.sh:/entrypoint.sh
+      - ./ollama/ollama:/root/.ollama
+      - ./anthill/entrypoint.sh:/entrypoint.sh
     container_name: ollama
     pull_policy: always
     tty: true
     restart: always
     entrypoint: ["/usr/bin/bash", "/entrypoint.sh"]
+    networks:
+      - default_network
+
+networks:
+  default_network:
+    driver: bridge

@@ -1,9 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore, addDoc, collection } from "firebase/firestore";
-// import admin from 'firebase-admin';
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { initializeApp } from 'firebase/app';
+import { doc, collection, getFirestore, addDoc, getDoc, updateDoc, arrayUnion, setDoc } from 'firebase/firestore';
+
 const firebaseConfig = {
     apiKey: "AIzaSyDmxHi0ePlXnK-R9mshM_f6f6uL_9ZB0Lw",
     authDomain: "anthill-976f5.firebaseapp.com",
@@ -14,10 +11,10 @@ const firebaseConfig = {
     measurementId: "G-HX6JM48RCP"
 };
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app_firebase = initializeApp(firebaseConfig);
 
-export const auth = getAuth(app);
+// const auth = getAuth(app_firebase)
 
 console.log("before db init");
 // Initialize Firestore
-export const db = getFirestore(app);
+export const db = getFirestore(app_firebase);

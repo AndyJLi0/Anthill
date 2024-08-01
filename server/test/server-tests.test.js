@@ -1,6 +1,32 @@
-import ollama from 'ollama'
 import { expect } from 'chai';
-import { testCases, runTestCases, pullModel } from '../index.js';
+import { testCases, runTestCases, databaseLog } from '../index.js';
+import { doc, getFirestore, getDoc, deleteDoc } from 'firebase/firestore';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+
+// const { expect } = require('chai');
+// const { testCases, runTestCases, databaseLog } = require('../index.js');
+// const { doc, getFirestore, getDoc, deleteDoc } = require('firebase/firestore');
+// const { initializeApp } = require('firebase/app');
+// const { getAuth } = require('firebase/auth');
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDmxHi0ePlXnK-R9mshM_f6f6uL_9ZB0Lw",
+  authDomain: "anthill-976f5.firebaseapp.com",
+  projectId: "anthill-976f5",
+  storageBucket: "anthill-976f5.appspot.com",
+  messagingSenderId: "404854557178",
+  appId: "1:404854557178:web:ba19d53bbac68de0773c43",
+  measurementId: "G-HX6JM48RCP"
+};
+// Initialize Firebase
+const app_firebase = initializeApp(firebaseConfig);
+
+const auth = getAuth(app_firebase);
+
+console.log("before db init");
+// Initialize Firestore
+const db = getFirestore(app_firebase);
 
 
 // the tests for testCases can be seen more verbosely described in
@@ -287,7 +313,13 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[1]);
-    expect(result.passed).to.equal(result.total - 3);
+    
+    
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 3);
   });
 
   it('snippet 2 incorrectly', () => {
@@ -300,7 +332,11 @@ describe('runTestCases tests incorrect functions', () => {
     } 
 
     let result = runTestCases(foo, testCases[2]);
-    expect(result.passed).to.equal(result.total - 6);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 6);
   });
 
   it('snippet 3 incorrectly', () => {
@@ -313,7 +349,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[3]);
-    expect(result.passed).to.equal(result.total - 2);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 2);
   });
 
   it('snippet 4 incorrectly', () => {
@@ -326,7 +366,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[4]);
-    expect(result.passed).to.equal(result.total - 2);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 2);
   });
 
   it('snippet 5 incorrectly', () => {
@@ -339,7 +383,11 @@ describe('runTestCases tests incorrect functions', () => {
     } 
 
     const result = runTestCases(foo, testCases[5]);
-    expect(result.passed).to.equal(result.total - 3);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 3);
   });
 
   it('snippet 6 incorrectly', () => {
@@ -354,7 +402,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[6]);
-    expect(result.passed).to.equal(result.total);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total);
   });
 
   it('snippet 7 incorrectly', () => {
@@ -374,7 +426,11 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[7]);
-    expect(result.passed).to.equal(result.total - 4);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 4);
   });
 
   it('snippet 8 incorrectly', () => {
@@ -396,12 +452,68 @@ describe('runTestCases tests incorrect functions', () => {
     }
 
     let result = runTestCases(foo, testCases[8]);
-    expect(result.passed).to.equal(result.total - 5);
+    let result_object = {
+      passed: Number(result[1][0]),
+      total: Number(result[1][2])
+    };
+    expect(result_object.passed).to.equal(result_object.total - 5);
   });
 });
 
-// const response = await ollama.chat({
-//   model: 'llama2',
-//   messages: [{ role: 'user', content: 'Why is the sky blue?' }],
-// })
-// console.log(response.message.content)
+describe('Logging function test', () => {
+  const email = "test_email";
+    const prompt = "test_prompt";
+    const questionId = 20;
+    const functionCode = "test_functionCode";
+    const result = [ "test",  "3/4" ];
+    const rationale = "test_rationale";
+
+    beforeEach(async () => {
+      // Clean up the test document before each test
+      await deleteDoc(doc(db, 'users', email));
+  });
+
+  it('should log for a new user', async () => {
+      await databaseLog(email, prompt, questionId, functionCode, result, rationale);
+
+      const userDocRef = doc(db, 'users', email);
+      const userDocSnap = await getDoc(userDocRef);
+      expect(userDocSnap.exists()).to.be.true;
+
+      const data = userDocSnap.data();
+      const logEntry = data.logs[0];
+      expect(logEntry.prompt).to.equal(prompt);
+      expect(logEntry.questionId).to.equal(questionId);
+      expect(logEntry.functionCode).to.equal(functionCode);
+      expect(logEntry.result.passed).to.equal(parseInt(result[1][0]));
+      expect(logEntry.result.total).to.equal(parseInt(result[1][2]));
+      expect(logEntry.rationale).to.equal(rationale);
+  });
+
+  it('should log for an existing user', async () => {
+      // Create an initial log entry
+      await databaseLog(email, prompt, questionId, functionCode, result, rationale);
+
+      // Log again with new details
+      const newPrompt = "new_test_prompt";
+      const newQuestionId = 21;
+      const newFunctionCode = "new_test_functionCode";
+      const newResult = ["new_test", "4/4"];
+      const newRationale = "new_test_rationale";
+      await databaseLog(email, newPrompt, newQuestionId, newFunctionCode, newResult, newRationale);
+
+      const userDocRef = doc(db, 'users', email);
+      const userDocSnap = await getDoc(userDocRef);
+      expect(userDocSnap.exists()).to.be.true;
+
+      const data = userDocSnap.data();
+      const logEntry = data.logs[1];
+      expect(logEntry.prompt).to.equal(newPrompt);
+      expect(logEntry.questionId).to.equal(newQuestionId);
+      expect(logEntry.functionCode).to.equal(newFunctionCode);
+      expect(logEntry.result.passed).to.equal(parseInt(newResult[1][0]));
+      expect(logEntry.result.total).to.equal(parseInt(newResult[1][2]));
+      expect(logEntry.rationale).to.equal(newRationale);
+  });
+
+});

@@ -8,11 +8,20 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
+    "@firebase/app": "^0.10.7",
+    "@firebase/auth": "^1.7.5",
+    "@firebase/firestore": "^4.6.4",
     "chai": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "firebase": "^10.12.4",
+    "firebase-admin": "^12.2.0",
     "mocha": "^10.6.0",
     "nodemon": "^3.1.4",
     "ollama": "^0.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.4"
   }
 }

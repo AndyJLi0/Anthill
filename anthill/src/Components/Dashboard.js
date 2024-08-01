@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, AppBar, Toolbar, Typography, Box, LinearProgress, Avatar } from '@mui/material';
-import { auth } from '../FirebaseConfig';
+import { auth, db } from '../FirebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
+import userAvatar from './aardvark.png';
+
 import { useEmail } from './EmailContext';
 
-
 const questions = [
-    { id: 1, title: 'Question 1', difficulty: 'Easy', score: '0/5' },
-    { id: 2, title: 'Question 2', difficulty: 'Easy', score: '0/5' },
-    { id: 3, title: 'Question 3', difficulty: 'Easy', score: '0/5' },
-    { id: 4, title: 'Question 4', difficulty: 'Medium', score: '0/5' },
-    { id: 5, title: 'Question 5', difficulty: 'Medium', score: '0/5' },
-    { id: 6, title: 'Question 6', difficulty: 'Medium', score: '0/5' },
-    { id: 7, title: 'Question 7', difficulty: 'Hard', score: '0/5' },
-    { id: 8, title: 'Question 8', difficulty: 'Hard', score: '0/5' },
+    { id: 1, title: 'Question 1', difficulty: 'Easy', score: 'Incomplete' },
+    { id: 2, title: 'Question 2', difficulty: 'Easy', score: 'Incomplete' },
+    { id: 3, title: 'Question 3', difficulty: 'Easy', score: 'Incomplete' },
+    { id: 4, title: 'Question 4', difficulty: 'Medium', score: 'Incomplete' },
+    { id: 5, title: 'Question 5', difficulty: 'Medium', score: 'Incomplete' },
+    { id: 6, title: 'Question 6', difficulty: 'Medium', score: 'Incomplete' },
+    { id: 7, title: 'Question 7', difficulty: 'Hard', score: 'Incomplete' },
+    { id: 8, title: 'Question 8', difficulty: 'Hard', score: 'Incomplete' },
 ];
 
+// Helper function to get the color of the chip based on the difficulty
 const getChipColor = (difficulty) => {
     switch (difficulty) {
         case 'Easy':
@@ -28,11 +31,13 @@ const getChipColor = (difficulty) => {
             return 'default';
     }
 };
-
+// Dashboard component
 const Dashboard = ({ user }) => {
 
     const { email } = useEmail();
     const navigate = useNavigate();
+
+    const [questionScores, setQuestionScores] = useState(questions);
 
     const handleLogout = () => {
         auth.signOut().then(() => {
@@ -42,11 +47,53 @@ const Dashboard = ({ user }) => {
         });
     };
 
+    // Function to update question status based on user logs
+    const fetchTestResults = async () => {
+        try {
+            if (!email) {
+                console.error("Email is null or undefined");
+                return;
+            }
+
+            const userDocRef = doc(db, 'users', email);
+            const userDocSnap = await getDoc(userDocRef);
+
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                const logs = userData.logs || [];
+
+                const updatedQuestions = questions.map((question) => {
+                    let highestScore = null;
+
+                    logs.forEach(log => {
+                        if (Number(log.questionId) === Number(question.id)) {
+                            if (!highestScore || log.result.passed > highestScore.passed) {
+                                highestScore = log.result;
+                            }
+                        }
+                    });
+                    const score = highestScore ? `${highestScore.passed}/${highestScore.total}` : 'Incomplete';
+                    return { ...question, score };
+                });
+
+                setQuestionScores(updatedQuestions);
+            } else {
+                console.log("no such document!");
+            }
+        } catch (error) {
+            console.error("Error fetching test results: ", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchTestResults();
+    }, [email, window.location]);
+
     return (
         <Container>
             <AppBar position="static" color="default">
                 <Toolbar>
-                    <Avatar alt="User Picture" src="/static/images/avatar/1.jpg" /> {/* Placeholder for user picture */}
+                    <Avatar alt="User Picture" src={userAvatar} />
                     <Typography variant="h6" style={{ flexGrow: 1, marginLeft: 16 }}>
                         Anthill {email}
                     </Typography>
@@ -54,9 +101,9 @@ const Dashboard = ({ user }) => {
                 </Toolbar>
             </AppBar>
             <Box my={4}>
-                <Typography variant="h6">Overall Progress </Typography>
-                <LinearProgress variant="determinate" value={0} />
-                <Typography variant="body2" color="textSecondary">0/8</Typography>
+                <Typography variant="h6">Overall Progress</Typography>
+                <LinearProgress variant="determinate" value={questionScores.filter(q => q.score !== 'Incomplete').length / questions.length * 100} />
+                <Typography variant="body2" color="textSecondary">{questionScores.filter(q => q.score !== 'Incomplete').length}/{questions.length}</Typography>
             </Box>
             <TableContainer component={Paper}>
                 <Table>
@@ -69,7 +116,7 @@ const Dashboard = ({ user }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {questions.map((question) => (
+                        {questionScores.map((question) => (
                             <TableRow key={question.id} hover onClick={() => navigate(`/question/${question.id}`)} style={{ cursor: 'pointer' }}>
                                 <TableCell>{question.title}</TableCell>
                                 <TableCell>
