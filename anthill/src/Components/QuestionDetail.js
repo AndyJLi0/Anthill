@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Container, Grid, Paper, Box, Typography, TextField, Button, Divider, List, ListItem, ListItemText, Collapse, Chip, ListItemButton, AppBar, Toolbar, Avatar } from '@mui/material';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { auth } from '../FirebaseConfig';
 import { useEmail } from './EmailContext';
 import userAvatar from './aardvark.png';
 
@@ -26,6 +27,7 @@ const QuestionDetail = () => {
     const [openHard, setOpenHard] = useState(true);
     const [resultMessage, setResultMessage] = useState('');
     const [previousAttempts, setPreviousAttempts] = useState([]);
+
     const navigate = useNavigate();
 
 
@@ -105,7 +107,7 @@ const QuestionDetail = () => {
                 break;
         }
     };
-
+  
     // logs the user out
     const handleLogout = () => {
         auth.signOut().then(() => {
@@ -114,7 +116,7 @@ const QuestionDetail = () => {
             console.error(err);
         });
     };
-
+  
     // formats the timestamp
     const formatTimestamp = (timestamp) => {
         if (timestamp && timestamp.seconds) {
@@ -129,8 +131,7 @@ const QuestionDetail = () => {
         fetchPreviousAttempts();
         fetchSnippet();
     }, [id, language]); // Dependencies array
-
-
+  
     return (
         <Container>
             <AppBar position="static" color="default">
@@ -249,6 +250,7 @@ const QuestionDetail = () => {
                         </Box>
                         {resultMessage && (
                             <Box mt={2}>
+                                <Typography variant="h6">Output</Typography>
                                 <Paper elevation={1} style={{ padding: 16 }}>
                                     <Typography variant="h5">Generated Code</Typography>
                                     <Typography variant="body1">{resultMessage.outputCode}</Typography>
